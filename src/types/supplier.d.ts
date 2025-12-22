@@ -1,0 +1,10 @@
+type Supplier = {
+    id: number
+    name: string
+    email: string
+    phone: string
+    address: string
+    debt: number
+    createdAt: string
+    updatedAt: string
+}
