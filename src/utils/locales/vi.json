@@ -1,4 +1,15 @@
 {
-    "dashboard": "Bảng điều khiển",
-    "miku-cute-vl": "Miku dễ thương vl"
+    "login.form.title": "Đăng nhập",
+    "login.form.username": "Tài khoản",
+    "login.form.password": "Mật khẩu",
+    "login.form.forgot-password": "Quên mật khẩu ?",
+    "login.form.btn.login": "Đăng nhập",
+    "login.message.success": "Đăng nhập thành công",
+    "login.message.failed": "Đăng nhập thất bại !",
+    "message.account.username.is-required": "Vui lòng nhập tài khoản",
+    "message.account.username.must-is-string": "Tài khoản phải là chuỗi ký tự",
+    "message.account.username.min-length-is-2": "Tài khoản phải có ít nhất 2 ký tự",
+    "message.account.username.max-length-is-32": "Tài khoản không được vượt quá 32 ký tự",
+    "message.account.password.is-required": "Vui lòng nhập mật khẩu",
+    "message.account.password.min-length-is-6": "Mật khẩu phải có ít nhất 6 ký tự"
 }

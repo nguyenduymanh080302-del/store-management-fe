@@ -5,6 +5,7 @@ type Account = {
     phone: string
     address: string
     username: string
+    password: string
     email: string
     isActive: boolean
     roleId: number

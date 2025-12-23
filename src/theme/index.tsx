@@ -1,23 +1,22 @@
 import type { ThemeConfig } from "antd";
+import { color } from "./colors";
 
 export const themeConfig: ThemeConfig = {
     token: {
-        colorPrimary: "#00FFFF",
-        colorBgBase: "#FFFFFF",
-        colorBgLayout: "#0F0F0F",
-        colorText: "#303030",
+        colorPrimary: color.primary,
+        colorBgBase: color.neutral[0],
+        colorText: color.neutral[8],
     },
     components: {
         Layout: {
             padding: 0,
             margin: 0,
-            headerBg: "#00FFFF",
-            colorBgLayout: "#FFF",
-            footerBg: "#00FFFF",
+            headerBg: color.primary,
+            headerColor: color.neutral[2],
+            footerBg: color.primary,
         },
         Button: {
-            colorPrimary: "#1677ff",
-            borderRadius: 6,
+            colorPrimary: color.blue[5],
         },
     },
 };

@@ -1,0 +1,10 @@
+.login {
+    &-card {
+        box-shadow: 0 0 12px 4px rgba(0, 0, 0, 0.16);
+        transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+            box-shadow: 0 0 16px 12px rgba(0, 0, 0, 0.16);
+        }
+    }
+}

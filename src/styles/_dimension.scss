@@ -1,0 +1,98 @@
+/* dimension.scss */
+
+/* =========================
+   Auto / Full
+========================= */
+.w-auto {
+    width: auto;
+}
+
+.h-auto {
+    height: auto;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.min-w-full {
+    min-width: 100%;
+}
+
+.min-h-full {
+    min-height: 100%;
+}
+
+.max-w-full {
+    max-width: 100%;
+}
+
+.max-h-full {
+    max-height: 100%;
+}
+
+.w-screen {
+    width: 100vw;
+}
+
+.h-screen {
+    height: 100vh;
+}
+
+/* =========================
+   Fixed px values
+========================= */
+$dimensions: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 96, 120, 160, 200, 240, 320, 360, 400, 500, 600, 700;
+
+@each $d in $dimensions {
+    .w-#{$d} {
+        width: #{$d}px;
+    }
+
+    .h-#{$d} {
+        height: #{$d}px;
+    }
+
+    .min-w-#{$d} {
+        min-width: #{$d}px;
+    }
+
+    .min-h-#{$d} {
+        min-height: #{$d}px;
+    }
+
+    .max-w-#{$d} {
+        max-width: #{$d}px;
+    }
+
+    .max-h-#{$d} {
+        max-height: #{$d}px;
+    }
+}
+
+/* =========================
+   Percentage
+========================= */
+$percents: 10, 20, 25, 33, 40, 50, 60, 66, 75, 80, 90, 100;
+
+@each $p in $percents {
+    .w-#{$p}p {
+        width: #{$p}"%";
+    }
+
+    .h-#{$p}p {
+        height: #{$p}"%";
+    }
+
+    .max-w-#{$p}p {
+        max-width: #{$p}"%";
+    }
+
+    .max-h-#{$p}p {
+        max-height: #{$p}"%";
+    }
+}

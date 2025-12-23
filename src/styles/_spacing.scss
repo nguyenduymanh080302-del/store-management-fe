@@ -1,0 +1,69 @@
+/* spacing.scss */
+
+$spaces: 0, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64;
+
+/* ===== Padding ===== */
+@each $s in $spaces {
+    .p-#{$s} {
+        padding: #{$s}px;
+    }
+
+    .pt-#{$s} {
+        padding-top: #{$s}px;
+    }
+
+    .pr-#{$s} {
+        padding-right: #{$s}px;
+    }
+
+    .pb-#{$s} {
+        padding-bottom: #{$s}px;
+    }
+
+    .pl-#{$s} {
+        padding-left: #{$s}px;
+    }
+
+    .px-#{$s} {
+        padding-left: #{$s}px;
+        padding-right: #{$s}px;
+    }
+
+    .py-#{$s} {
+        padding-top: #{$s}px;
+        padding-bottom: #{$s}px;
+    }
+}
+
+/* ===== Margin ===== */
+@each $s in $spaces {
+    .m-#{$s} {
+        margin: #{$s}px;
+    }
+
+    .mt-#{$s} {
+        margin-top: #{$s}px;
+    }
+
+    .mr-#{$s} {
+        margin-right: #{$s}px;
+    }
+
+    .mb-#{$s} {
+        margin-bottom: #{$s}px;
+    }
+
+    .ml-#{$s} {
+        margin-left: #{$s}px;
+    }
+
+    .mx-#{$s} {
+        margin-left: #{$s}px;
+        margin-right: #{$s}px;
+    }
+
+    .my-#{$s} {
+        margin-top: #{$s}px;
+        margin-bottom: #{$s}px;
+    }
+}

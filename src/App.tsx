@@ -1,4 +1,4 @@
-import { ConfigProvider, Spin } from "antd"
+import { App as AntdApp, ConfigProvider, Spin } from "antd"
 import Locales from "components/Locales"
 import { Suspense } from "react"
 import { themeConfig } from "./theme"
@@ -10,9 +10,11 @@ function App() {
   return (
     <Locales>
       <ConfigProvider theme={themeConfig}>
-        <Suspense fallback={<Spin fullscreen />}>
-          <RouterProvider router={appRouter} />
-        </Suspense>
+        <AntdApp>
+          <Suspense fallback={<Spin fullscreen />}>
+            <RouterProvider router={appRouter} />
+          </Suspense>
+        </AntdApp>
       </ConfigProvider>
     </Locales>
   )
