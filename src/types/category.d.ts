@@ -1,4 +1,3 @@
-
 type Category = {
     id: number
     name: string
@@ -6,3 +5,7 @@ type Category = {
     createdAt: string
     updatedAt: string
 }
+
+type CreateCategoryPayload = Pick<Category, 'name' | 'slug'>
+
+type UpdateCategoryPayload = Partial<CreateCategoryPayload>

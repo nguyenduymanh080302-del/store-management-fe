@@ -38,3 +38,24 @@ declare module '*.svg' {
     const src: string
     export default src
 }
+
+/// <reference types="vite/client" />
+
+declare module '*.svg?react' {
+    import * as React from 'react'
+    const ReactComponent: React.FC<
+        React.SVGProps<SVGSVGElement> & { title?: string }
+    >
+    export default ReactComponent
+}
+
+type SvgProps = {
+    width: number;
+    height?: number;
+    className?: string;
+    color?: string;
+}
+
+type Language = "vi" | "en" | "zh-cn" | "ja";
+
+type ModalActionMode = "create" | "edit" | "delete";

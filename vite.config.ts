@@ -1,10 +1,11 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import svgr from "vite-plugin-svgr";
 import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgr()],
   resolve: {
     alias: {
       apis: path.resolve(__dirname, "src/apis"),
@@ -18,7 +19,9 @@ export default defineConfig({
       stores: path.resolve(__dirname, "src/stores"),
       services: path.resolve(__dirname, "src/services"),
       styles: path.resolve(__dirname, "src/styles"),
+      theme: path.resolve(__dirname, "src/theme"),
       utils: path.resolve(__dirname, "src/utils"),
+      validations: path.resolve(__dirname, "src/validations"),
     },
   },
   server: {

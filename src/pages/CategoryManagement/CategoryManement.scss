@@ -1,0 +1,14 @@
+.ant-btn.category-management {
+    &-btn {
+        &-generate {
+            background-color: var(--color-blue-6);
+            border-color: var(--color-blue-6);
+            &:hover,
+            &.ant-btn:hover,
+            &:focus {
+                background-color: var(--color-blue-7);
+                border-color: var(--color-blue-7);
+            }
+        }
+    }
+}

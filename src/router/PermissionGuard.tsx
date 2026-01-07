@@ -8,18 +8,19 @@ type Props = {
 }
 
 export function PermissionGuard({ permission, children }: Props) {
-    const { isAuthenticated, account } = useAuthStore()
+    const { account } = useAuthStore()
 
-    if (!isAuthenticated) {
+    if (!account) {
         return <Navigate to="/auth/login" />
     }
 
     if (
         permission &&
-        !account?.role?.permissions?.includes(permission)
+        !account.role?.permissions?.includes(permission)
     ) {
         return <div>403 - Permission denied</div>
     }
 
     return <>{children}</>
 }
+

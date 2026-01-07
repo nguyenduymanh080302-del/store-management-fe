@@ -1,0 +1,58 @@
+/* ===== Font size (rem) ===== */
+$font-sizes: (
+    10: 0.625rem,
+    // 10px
+    12: 0.75rem,
+    // 12px
+    14: 0.875rem,
+    // 14px
+    16: 1rem,
+    // 16px
+    18: 1.125rem,
+    // 18px
+    20: 1.25rem,
+    // 20px
+    24: 1.5rem,
+    // 24px
+    28: 1.75rem,
+    // 28px
+    32: 2rem,
+    // 32px
+    40: 2.5rem // 40px
+);
+
+@each $key, $value in $font-sizes {
+    .text-#{$key} {
+        font-size: $value;
+    }
+}
+
+/* ===== Font weight ===== */
+$font-weights: (
+    thin: 100,
+    light: 300,
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700
+);
+
+@each $name, $value in $font-weights {
+    .font-#{$name} {
+        font-weight: $value;
+    }
+}
+
+/* ===== Line height ===== */
+$line-heights: (
+    tight: 1.2,
+    normal: 1.4,
+    relaxed: 1.6,
+    loose: 1.8
+);
+
+@each $name, $value in $line-heights {
+    .leading-#{$name} {
+        line-height: $value;
+    }
+}

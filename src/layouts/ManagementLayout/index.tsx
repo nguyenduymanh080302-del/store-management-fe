@@ -1,78 +1,65 @@
-import {
-    HomeOutlined,
-    SettingOutlined,
-    UserOutlined,
-} from "@ant-design/icons";
-import { Layout, Menu } from "antd";
-import { Outlet } from "@tanstack/react-router";
-
+import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Image, Layout, Menu, MenuProps, Typography } from "antd";
+import logo from "assets/images/logo.png";
+import SelectLanguage from "components/Select/SelectLanguage";
+import { managementMenuConfig } from "configs/managmentMenu.config";
+import { FormattedMessage } from "react-intl";
+import { useAuthStore } from "stores/auth.store";
 const { Sider, Header, Content, Footer } = Layout;
 
 const ManagementLayout = () => {
+
+    const navigate = useNavigate()
+    const pathname = useRouterState().location.pathname.replace("/", "")
+
+    const permissions = useAuthStore(
+        state => state.account?.role?.permissions
+    )
+
+    const buildMenuItems = (
+        menus = managementMenuConfig,
+    ): MenuProps["items"] => {
+        if (!permissions) return []
+
+        return menus
+            .filter(menu => permissions.includes(menu.permission))
+            .map(menu => ({
+                key: menu.key,
+                icon: menu.icon,
+                label: <FormattedMessage id={menu.labelId} />,
+                children: menu.children
+                    ? buildMenuItems(menu.children)
+                    : undefined,
+            }))
+            .filter(menu => !menu.children || menu.children.length > 0)
+    }
+
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            {/* SIDEBAR */}
-            <Sider
-                width={220}
-                style={{
-                    background: "#1070ff",
-                    paddingTop: "20px",
-                }}
-            >
+            <Sider width={220} >
+                <Image src={logo} preview={false} className="object-cover" />
                 <Menu
-                    theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={["1"]}
-                    items={[
-                        { key: "1", icon: <HomeOutlined />, label: "Dashboard" },
-                        { key: "2", icon: <UserOutlined />, label: "Users" },
-                        { key: "3", icon: <SettingOutlined />, label: "Settings" },
-                    ]}
+                    items={buildMenuItems()}
+                    onClick={({ key }) => navigate({ to: key as string })}
+                    className="mt-24"
                 />
             </Sider>
-
-            {/* RIGHT SIDE: HEADER + CONTENT + FOOTER */}
             <Layout>
-                {/* HEADER */}
-                <Header
-                    style={{
-                        background: "#4da3ff",
-                        padding: "20px",
-                        fontSize: "20px",
-                        color: "#fff",
-                        textAlign: "center",
-                    }}
-                >
-                    Management Header
+                <Header className="flex flex-row justify-between items-center py-12 px-16">
+                    <Typography.Title level={5} className="text-neutral-0 m-0">
+                        <FormattedMessage id={pathname ? `managment.sider.menu.${pathname}` : "managment.sider.menu.default"} />
+                    </Typography.Title>
+                    <SelectLanguage />
                 </Header>
-
-                {/* CONTENT */}
-                <Content
-                    style={{
-                        background: "#0d5ce0",
-                        padding: "24px",
-                        minHeight: "calc(100vh - 160px)",
-                        color: "#fff",
-                        textAlign: "center",
-                    }}
-                >
+                <Content className="p-16">
                     <Outlet />
                 </Content>
-
-                {/* FOOTER */}
-                <Footer
-                    style={{
-                        background: "#4da3ff",
-                        padding: "15px",
-                        textAlign: "center",
-                        color: "#fff",
-                    }}
-                >
-                    © {new Date().getFullYear()} Your Company
-                </Footer>
+                <Footer>© {new Date().getFullYear()}</Footer>
             </Layout>
         </Layout>
-    );
-};
+    )
+}
+
 
 export default ManagementLayout;

@@ -1,7 +1,7 @@
 import {
     createRootRoute,
     createRoute,
-    createRouter,
+    createRouter
 } from '@tanstack/react-router'
 
 import AuthLayout from 'layouts/AuthLayout'
@@ -31,9 +31,9 @@ const managementLayoutRoute = createRoute({
     getParentRoute: () => rootRoute,
     path: '/',
     component: () => (
-        // <PermissionGuard>
-        <ManagementLayout />
-        //</PermissionGuard>
+        <PermissionGuard>
+            <ManagementLayout />
+        </PermissionGuard>
     ),
 })
 
@@ -42,9 +42,9 @@ const managementChildRoutes = managementRoutes.map((r) =>
         getParentRoute: () => managementLayoutRoute,
         path: r.path,
         component: () => (
-            // <PermissionGuard permission={r.permission}>
-            <>{r.element}</>
-            // </PermissionGuard>
+            <PermissionGuard permission={r.permission}>
+                <>{r.element}</>
+            </PermissionGuard>
         ),
     })
 )

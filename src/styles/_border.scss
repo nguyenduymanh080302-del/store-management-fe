@@ -1,0 +1,51 @@
+/* border.scss */
+
+$border-widths: 1, 2, 4;
+$border-styles: solid, dashed, dotted;
+$border-radius: 0, 2, 4, 6, 8, 10, 12, 16, 20;
+
+/* ===== Border width ===== */
+@each $w in $border-widths {
+    .border-#{$w} {
+        border-width: #{$w}px;
+        border-style: solid;
+    }
+
+    .border-t-#{$w} {
+        border-top-width: #{$w}px;
+        border-style: solid;
+    }
+
+    .border-r-#{$w} {
+        border-right-width: #{$w}px;
+        border-style: solid;
+    }
+
+    .border-b-#{$w} {
+        border-bottom-width: #{$w}px;
+        border-style: solid;
+    }
+
+    .border-l-#{$w} {
+        border-left-width: #{$w}px;
+        border-style: solid;
+    }
+}
+
+/* ===== Border style ===== */
+@each $style in $border-styles {
+    .border-#{$style} {
+        border-style: $style;
+    }
+}
+
+/* ===== Border radius ===== */
+@each $r in $border-radius {
+    .rounded-#{$r} {
+        border-radius: #{$r}px;
+    }
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}

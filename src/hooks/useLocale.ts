@@ -8,9 +8,6 @@ type UseLocaleResult = {
 
 export const useLocale = (): UseLocaleResult => {
   const intl = useIntl();
-
-
-
   const formatMessage = useCallback(
     (id: string, values?: Record<string, any>) => {
       return intl.formatMessage({ id }, values);
@@ -23,3 +20,5 @@ export const useLocale = (): UseLocaleResult => {
     intl
   };
 };
+
+

@@ -1,18 +1,27 @@
 // src/layouts/AuthLayout.tsx
-import { Layout } from "antd";
 import { Outlet } from "@tanstack/react-router";
-import "./AuthLayout.scss"
-import auth_layout_bg from "assets/images/auth-layout-bg.png"
+import { Flex, Image, Layout, Typography } from "antd";
+import auth_layout_bg from "assets/images/auth-layout-bg.png";
+import logo from "assets/images/logo.png";
+import SelectLanguage from "components/Select/SelectLanguage";
+import "./AuthLayout.scss";
 
 const { Header, Content, Footer } = Layout;
 
 const AuthLayout = () => {
+
     return (
         <Layout className="h-screen flex flex-col">
 
             {/* HEADER */}
-            <Header className="flex items-center">
-                Authentication
+            <Header className="flex items-center justify-between py-12">
+                <Flex align="center" justify="space-between" gap={24}>
+                    <Image src={logo} alt="Logo" height={60} preview={false} />
+                    <Typography.Title level={3} className="text-neutral-0 m-0">
+                        Store Management
+                    </Typography.Title>
+                </Flex>
+                <SelectLanguage />
             </Header>
 
             {/* CONTENT */}

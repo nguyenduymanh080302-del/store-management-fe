@@ -1,24 +1,45 @@
 import { create } from 'zustand'
 
-type AuthState = {
-    account: Account | null
-    accessToken: string | null
-    refreshToken: string | null
-    isAuthenticated: boolean
+type SafeAccount = Omit<Account, 'password'>
 
-    login: (account: Account, accessToken: string, refreshToken: string) => void
+type AuthState = {
+    account: SafeAccount | null
+    isAuthInitialized: boolean,
+
+    setAccount: (account: SafeAccount | null) => void
+    login: (
+        account: SafeAccount,
+        accessToken: string,
+        refreshToken: string,
+    ) => void
     logout: () => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
     account: null,
-    accessToken: null,
-    refreshToken: null,
-    isAuthenticated: false,
+    isAuthInitialized: false,
 
-    login: (account, accessToken, refreshToken) =>
-        set({ account, accessToken, refreshToken, isAuthenticated: true }),
+    setAccount: (account) =>
+        set({
+            account,
+            isAuthInitialized: true,
+        }),
 
-    logout: () =>
-        set({ account: null, accessToken: null, refreshToken: null, isAuthenticated: false }),
+    login: (account, accessToken, refreshToken) => {
+        localStorage.setItem('accessToken', accessToken)
+        localStorage.setItem('refreshToken', refreshToken)
+
+        set({
+            account,
+            isAuthInitialized: true,
+        })
+    },
+
+    logout: () => {
+        localStorage.clear()
+        set({
+            account: null,
+            isAuthInitialized: false,
+        })
+    },
 }))

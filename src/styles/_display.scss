@@ -98,11 +98,110 @@
     flex-wrap: nowrap;
 }
 
+/* ===== Flex grow ===== */
+.flex-1 {
+    flex: 1 1 0%;
+}
+
+.flex-auto {
+    flex: 1 1 auto;
+}
+
+.flex-initial {
+    flex: 0 1 auto;
+}
+
+.flex-none {
+    flex: 0 0 auto;
+}
+
+/* ===== Flex basis (fractions) ===== */
+.flex-1\/2 {
+    flex: 0 0 50%;
+}
+
+.flex-1\/3 {
+    flex: 0 0 33.333333%;
+}
+
+.flex-2\/3 {
+    flex: 0 0 66.666667%;
+}
+
+.flex-1\/4 {
+    flex: 0 0 25%;
+}
+
+.flex-3\/4 {
+    flex: 0 0 75%;
+}
+
 /* ===== Gap (flex + grid) ===== */
-$gaps: 4, 8, 12, 16, 20, 24, 32;
+$gaps: 4, 8, 12, 16, 20, 24, 32, 36, 40, 48;
 
 @each $g in $gaps {
     .gap-#{$g} {
         gap: #{$g}px;
     }
+}
+
+.object-cover {
+    object-fit: cover;
+}
+.object-contain {
+    object-fit: contain;
+}
+.object-fill {
+    object-fit: fill;
+}
+.object-none {
+    object-fit: none;
+}
+.object-scale-down {
+    object-fit: scale-down;
+}
+.object-center {
+    object-position: center;
+}
+.object-top {
+    object-position: top;
+}
+.object-bottom {
+    object-position: bottom;
+}
+.object-left {
+    object-position: left;
+}
+.object-right {
+    object-position: right;
+}
+.object-left-top {
+    object-position: left top;
+}
+.object-left-bottom {
+    object-position: left bottom;
+}
+.object-right-top {
+    object-position: right top;
+}
+.object-right-bottom {
+    object-position: right bottom;
+}
+.aspect-square {
+    aspect-ratio: 1 / 1;
+}
+.aspect-4\/3 {
+    aspect-ratio: 4 / 3;
+}
+.aspect-3\/2 {
+    aspect-ratio: 3 / 2;
+}
+.aspect-16\/9 {
+    aspect-ratio: 16 / 9;
+}
+.aspect-21\/9 {
+    aspect-ratio: 21 / 9;
+}
+.aspect-auto {
+    aspect-ratio: auto;
 }

@@ -1,10 +1,88 @@
-//index.scss
+@use "sass:map";
 @use "./display";
+@use "./font";
 @use "./spacing";
+@use "./border";
 @use "./dimension";
+@use "./color" as *;
+
+/* ===== Base ===== */
+:root {
+    /* ===== Brand ===== */
+    @each $key, $value in $main {
+        --color-main-#{$key}: #{$value};
+    }
+
+    /* ===== Neutral ===== */
+    @each $key, $value in $neutral {
+        --color-neutral-#{$key}: #{$value};
+    }
+
+    /* ===== Cyan ===== */
+    @each $key, $value in $cyan {
+        --color-cyan-#{$key}: #{$value};
+    }
+
+    /* ===== Blue ===== */
+    @each $key, $value in $blue {
+        --color-blue-#{$key}: #{$value};
+    }
+
+    /* ===== Green ===== */
+    @each $key, $value in $green {
+        --color-green-#{$key}: #{$value};
+    }
+
+    /* ===== Red ===== */
+    @each $key, $value in $red {
+        --color-red-#{$key}: #{$value};
+    }
+
+    /* ===== Orange ===== */
+    @each $key, $value in $orange {
+        --color-orange-#{$key}: #{$value};
+    }
+}
 
 body {
     margin: 0;
     padding: 0;
-    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+    font-family: "Roboto Mono", monospace;
 }
+
+/* ===== Brand ===== */
+.text-main-primary {
+    color: map.get($main, primary);
+}
+
+.text-main-secondary {
+    color: map.get($main, secondary);
+}
+
+.bg-main-primary {
+    background-color: map.get($main, primary);
+}
+
+.bg-main-secondary {
+    background-color: map.get($main, secondary);
+}
+
+@include generate-colors("main", $main);
+
+/* Neutral */
+@include generate-colors("neutral", $neutral);
+
+/* Cyan */
+@include generate-colors("cyan", $cyan);
+
+/* Blue */
+@include generate-colors("blue", $blue);
+
+/* Green */
+@include generate-colors("green", $green);
+
+/* Red */
+@include generate-colors("red", $red);
+
+/* Orange */
+@include generate-colors("orange", $orange);

@@ -15,9 +15,9 @@ export const useAppStore = create<AppState>()(
                 import.meta.env.VITE_LANGUAGE_DEFAULT ||
                 "vi",
 
-            setLanguage: (lang: string) => {
-                set({ locale: lang });
-                localStorage.setItem("locale", lang);
+            setLanguage: (language: string) => {
+                set({ locale: language });
+                localStorage.setItem("locale", language);
             },
         }),
         {

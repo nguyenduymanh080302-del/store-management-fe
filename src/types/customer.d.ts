@@ -8,3 +8,9 @@ type Customer = {
     createdAt: string
     updatedAt: string
 }
+
+interface SelectOption<T = string> {
+    value: T;
+    label: React.ReactNode;
+    disabled?: boolean;
+}

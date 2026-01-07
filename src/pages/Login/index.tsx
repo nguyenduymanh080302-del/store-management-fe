@@ -1,27 +1,34 @@
-import { Link } from '@tanstack/react-router'
+import { Link, Navigate, useNavigate } from '@tanstack/react-router'
 import { App, Button, Card, Form, Input } from 'antd'
 import { HttpStatusCode } from 'axios'
 import { useSignin } from 'hooks'
 import { FormattedMessage } from 'react-intl'
+import { useAuthStore } from 'stores/auth.store'
 import "./Login.scss"
 
 const Login = () => {
 
     const [loginForm] = Form.useForm()
     const signinMutation = useSignin()
-
+    const navigate = useNavigate()
     const { notification } = App.useApp()
+
+    const { account, login } = useAuthStore()
+
+    if (account) {
+        return <Navigate to="/" replace />
+    }
 
     const handleLogin = (values: any) => {
         signinMutation.mutate(values, {
             onSuccess: (response) => {
                 if (response.status === HttpStatusCode.Ok) {
-                    const { accessToken, refreshToken } = response.data
-                    localStorage.setItem('accessToken', accessToken)
-                    localStorage.setItem('refreshToken', refreshToken)
+                    const { account, accessToken, refreshToken } = response.data
+                    login(account, accessToken, refreshToken)
                     notification.success({
                         title: <FormattedMessage id="login.message.success" />
                     })
+                    navigate({ to: '/' })
                 } else {
                     notification.error({
                         title: <FormattedMessage id={response.message} />

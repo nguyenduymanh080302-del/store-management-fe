@@ -7,8 +7,8 @@ type Messages =
     | Record<string, string>
     | Record<string, MessageFormatElement[]>;
 
-const loadLocaleData = (locale: string): Promise<{ default: Messages }> => {
-    return import(`utils/locales/${locale}.json`).catch(() =>
+const loadLocaleData = async (locale: string): Promise<{ default: Messages }> => {
+    return await import(`utils/locales/${locale}.json`).catch(() =>
         import("utils/locales/vi.json")
     );
 };
@@ -29,16 +29,15 @@ const Locales: React.FC<Props> = ({ children }) => {
             if (isMounted) setMessages(res.default);
         });
 
-        // cleanup to avoid memory leak on fast language switches
         return () => {
-            isMounted = false;
+            isMounted = false; //switch mounted
         };
     }, [locale]);
 
     if (!messages) return null;
 
     return (
-        <IntlProvider locale={locale} defaultLocale="en" messages={messages}>
+        <IntlProvider locale={locale} defaultLocale="vi" messages={messages}>
             {children}
         </IntlProvider>
     );

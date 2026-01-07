@@ -1,3 +1,5 @@
+import { managementRoutes } from "router/routeConfig";
+
 export type FileLike = Blob | File;
 
 // -------------------- Functions --------------------
@@ -62,3 +64,31 @@ export const omit = <T extends object, K extends keyof T>(object: T, keys: K[]):
 
     return newObj;
 };
+
+export const getDefaultManagementRoute = (
+    permissions: string[] = []
+) => {
+    return managementRoutes.find(route =>
+        permissions.includes(route.permission)
+    );
+};
+
+export const normalizeSpace = (value?: string) => {
+    if (!value) return value;
+
+    return value.replace(/\s+/g, ' ')
+};
+
+export const normalizeSlug = (value?: string) => {
+    if (!value) return value;
+
+    return value
+        .toLowerCase()
+        .replace(/\s+/g, '-')        // space → dash
+        .replace(/[^a-z0-9-]/g, '')  // remove invalid chars
+        .replace(/-+/g, '-')         // no double dashes
+        .replace(/^-+|-+$/g, '');    // trim dashes
+};
+
+
+
