@@ -2,7 +2,7 @@ import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Image, Layout, Menu, MenuProps, Typography } from "antd";
 import logo from "assets/images/logo.png";
 import SelectLanguage from "components/Select/SelectLanguage";
-import { managementMenuConfig } from "configs/managmentMenu.config";
+import { managementMenu } from "components/managmentMenu";
 import { FormattedMessage } from "react-intl";
 import { useAuthStore } from "stores/auth.store";
 const { Sider, Header, Content, Footer } = Layout;
@@ -17,7 +17,7 @@ const ManagementLayout = () => {
     )
 
     const buildMenuItems = (
-        menus = managementMenuConfig,
+        menus = managementMenu,
     ): MenuProps["items"] => {
         if (!permissions) return []
 

@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>((set) => ({
         localStorage.clear()
         set({
             account: null,
-            isAuthInitialized: false,
+            isAuthInitialized: true,
         })
     },
 }))

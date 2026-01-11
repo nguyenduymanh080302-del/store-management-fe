@@ -1,5 +1,7 @@
 /* src/styles/_color.scss */
 @use "sass:map";
+@use "sass:color";
+
 /* ===== Brand ===== */
 $main: (
     primary: #2f9c96,
@@ -114,7 +116,7 @@ $orange: (
 
             &:hover,
             &.ant-btn:hover {
-                background-color: darken($value, 5%);
+                background-color: color.adjust($value, $lightness: -5%);
             }
         }
         .border-#{$group-name}-#{$key} {

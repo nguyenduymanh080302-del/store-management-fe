@@ -1,4 +1,5 @@
 import { Navigate } from '@tanstack/react-router'
+import { Spin } from 'antd'
 import { useAuthStore } from 'stores/auth.store'
 import { PERMISSION } from 'utils/enum'
 
@@ -8,7 +9,11 @@ type Props = {
 }
 
 export function PermissionGuard({ permission, children }: Props) {
-    const { account } = useAuthStore()
+    const { account, isAuthInitialized } = useAuthStore()
+
+    if (!isAuthInitialized) {
+        return <Spin size='large' fullscreen />
+    }
 
     if (!account) {
         return <Navigate to="/auth/login" />

@@ -8,6 +8,7 @@ import AuthLayout from 'layouts/AuthLayout'
 import ManagementLayout from 'layouts/ManagementLayout'
 import { PermissionGuard } from './PermissionGuard'
 import { authRoutes, managementRoutes } from './routeConfig'
+import { Spin } from 'antd'
 
 const rootRoute = createRootRoute()
 
@@ -22,7 +23,7 @@ const authChildRoutes = authRoutes.map((r) =>
     createRoute({
         getParentRoute: () => authLayoutRoute,
         path: r.path,
-        component: () => r.element,
+        component: r.component,
     })
 )
 
@@ -35,6 +36,7 @@ const managementLayoutRoute = createRoute({
             <ManagementLayout />
         </PermissionGuard>
     ),
+    pendingComponent: () => <Spin size='large' fullscreen />,
 })
 
 const managementChildRoutes = managementRoutes.map((r) =>
@@ -43,9 +45,10 @@ const managementChildRoutes = managementRoutes.map((r) =>
         path: r.path,
         component: () => (
             <PermissionGuard permission={r.permission}>
-                <>{r.element}</>
+                <r.component />
             </PermissionGuard>
         ),
+        pendingComponent: () => <Spin size='large' fullscreen />,
     })
 )
 

@@ -32,7 +32,6 @@ function App() {
     checkAccountAuthentication()
   }, [logout, setAccount, accessToken])
 
-
   return (
     <Locales>
       <ConfigProvider theme={themeConfig}>

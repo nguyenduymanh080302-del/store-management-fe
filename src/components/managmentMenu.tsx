@@ -2,7 +2,15 @@
 import { IconAccountSettings, IconContent, IconDashboard, IconSales } from "assets/icons"
 import { PERMISSION } from "utils/enum"
 
-export const managementMenuConfig: ManagementMenuItem[] = [
+interface ManagementMenuItem {
+    key: string
+    labelId: string
+    icon?: React.ReactNode
+    permission: PERMISSION
+    children?: ManagementMenuItem[]
+}
+
+export const managementMenu: ManagementMenuItem[] = [
     {
         key: "dashboard",
         icon: <IconDashboard width={20} height={20} fill="var(--color-neutral-0)" />,

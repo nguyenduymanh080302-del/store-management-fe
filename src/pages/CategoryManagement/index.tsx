@@ -9,12 +9,11 @@ import { useIntl } from 'react-intl';
 import { useAppStore } from 'stores/app.store';
 import { DATE_FORMAT_BY_LOCALE } from 'utils/constant';
 import { generatePathFromName, normalizeSlug, normalizeSpace } from 'utils/hepler';
-import "./CategoryManement.scss";
 
 const CategoryManagement = () => {
 
     const { data, isLoading } = useCategoryListQuery();
-    const { mutateAsync: createCategory, isPending } = useCreateCategoryMutation();
+    const { mutateAsync: createCategory, isPending: isCreating } = useCreateCategoryMutation();
     const { mutateAsync: updateCategory, isPending: isUpdating } = useUpdateCategoryMutation();
     const { mutateAsync: deleteCategory, isPending: isDeleting } = useDeleteCategoryMutation();
     const locale = useAppStore(state => state.locale)
@@ -184,7 +183,7 @@ const CategoryManagement = () => {
                 onCancel={handleClose}
                 onOk={handleSubmit}
                 okText={<FormattedMessage id={`management.category.modal.btn.${mode}`} />}
-                okButtonProps={{ className: "bg-red-5" }}
+                okButtonProps={{ className: mode === 'delete' ? 'bg-red-5' : 'bg-main-primary', loading: isCreating || isUpdating || isDeleting }}
                 cancelText={<FormattedMessage id="management.category.modal.btn.cancel" />}
             >
                 {mode === "delete" ? (
@@ -236,7 +235,6 @@ const CategoryManagement = () => {
                                     htmlType="button"
                                     className="bg-blue-6"
                                     onClick={handleGenerateSlug}
-                                    loading={isPending || isUpdating || isDeleting}
                                 >
                                     <FormattedMessage id="management.category.btn.generate-slug" />
                                 </Button>
