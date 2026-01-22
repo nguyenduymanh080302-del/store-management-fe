@@ -134,7 +134,7 @@ const UnitManagement = () => {
             render: (_, record) => (
                 <Button
                     type="primary"
-                    className="bg-red-5"
+                    className="bg-red-3"
                     onClick={() => handleChangeMode('delete', record)}
                 >
                     <IconTrash height={18} width={18} />
@@ -147,9 +147,7 @@ const UnitManagement = () => {
         <Flex vertical gap={12}>
             <Flex justify="space-between">
                 <Typography.Title level={5} className="m-0" />
-                <Button
-                    type="primary"
-                    size="large"
+                <Button type="primary" size="middle"
                     className="flex flex-row items-center gap-8"
                     onClick={() => handleChangeMode('create')}
                 >
@@ -173,7 +171,7 @@ const UnitManagement = () => {
                 onCancel={handleClose}
                 onOk={handleSubmit}
                 okText={<FormattedMessage id={`management.unit.modal.btn.${mode}`} />}
-                okButtonProps={{ className: mode === 'delete' ? 'bg-red-5' : 'bg-main-primary', loading: isCreating || isUpdating || isDeleting }}
+                okButtonProps={{ className: mode === 'delete' ? 'bg-red-3' : 'bg-main-primary', loading: isCreating || isUpdating || isDeleting }}
                 cancelText={<FormattedMessage id="management.unit.modal.btn.cancel" />}
             >
                 {mode === 'delete' ? (

@@ -32,6 +32,7 @@ export const managementMenu: ManagementMenuItem[] = [
         children: [
             { key: "/sales", labelId: "managment.sider.menu.sales", permission: PERMISSION.MANAGE_SALES },
             { key: "/customer", labelId: "managment.sider.menu.customer", permission: PERMISSION.MANAGE_SALES },
+            { key: "/supplier", labelId: "managment.sider.menu.supplier", permission: PERMISSION.MANAGE_CONTENT },
             { key: "/delivery", labelId: "managment.sider.menu.delivery", permission: PERMISSION.MANAGE_SALES },
         ],
     },
@@ -43,7 +44,6 @@ export const managementMenu: ManagementMenuItem[] = [
         children: [
             { key: "/category", labelId: "managment.sider.menu.category", permission: PERMISSION.MANAGE_CONTENT },
             { key: "/product", labelId: "managment.sider.menu.product", permission: PERMISSION.MANAGE_CONTENT },
-            { key: "/supplier", labelId: "managment.sider.menu.supplier", permission: PERMISSION.MANAGE_CONTENT },
             { key: "/unit", labelId: "managment.sider.menu.unit", permission: PERMISSION.MANAGE_CONTENT },
         ],
     },
@@ -52,9 +52,9 @@ export const managementMenu: ManagementMenuItem[] = [
         key: "account",
         icon: <IconAccountSettings width={20} height={20} fill="var(--color-neutral-0)" />,
         labelId: "managment.sider.menu.account-management",
-        permission: PERMISSION.MANAGE_EMPLOYEE,
+        permission: PERMISSION.MANAGE_ACCOUNT,
         children: [
-            { key: "/employee", labelId: "managment.sider.menu.employee", permission: PERMISSION.MANAGE_EMPLOYEE },
+            { key: "/account", labelId: "managment.sider.menu.account", permission: PERMISSION.MANAGE_ACCOUNT },
         ],
     },
 ]

@@ -23,7 +23,6 @@
     "react-intl": "^7.1.14",
     "tsconfig": "^7.0.0",
     "uninstall": "^0.0.0",
-    "yup": "^1.7.1",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

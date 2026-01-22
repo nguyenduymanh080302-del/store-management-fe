@@ -13,18 +13,13 @@ export const fetchSupplierById = async (id: number): Promise<ApiResponse<Supplie
 };
 
 // CREATE
-export const createSupplier = async (
-    data: CreateSupplierPayload,
-): Promise<ApiResponse<Supplier>> => {
+export const createSupplier = async (data: CreateSupplierPayload): Promise<ApiResponse<Supplier>> => {
     const res = await axios.post('/supplier', data);
     return res.data;
 };
 
 // UPDATE
-export const updateSupplier = async (
-    id: number,
-    data: UpdateSupplierPayload,
-): Promise<ApiResponse<Supplier>> => {
+export const updateSupplier = async (id: number, data: UpdateSupplierPayload): Promise<ApiResponse<Supplier>> => {
     const res = await axios.patch(`/supplier/${id}`, data);
     return res.data;
 };

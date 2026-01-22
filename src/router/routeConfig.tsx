@@ -53,9 +53,9 @@ export const managementRoutes: AppRoute[] = [
         permission: PERMISSION.MANAGE_SALES,
     },
     {
-        path: '/employee',
-        component: lazyRouteComponent(() => import('pages/EmployeeManagement')),
-        permission: PERMISSION.MANAGE_EMPLOYEE,
+        path: '/account',
+        component: lazyRouteComponent(() => import('pages/AccountManagement')),
+        permission: PERMISSION.MANAGE_ACCOUNT,
     },
     {
         path: '/supplier',

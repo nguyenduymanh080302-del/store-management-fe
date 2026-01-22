@@ -18,10 +18,11 @@ const SelectLanguage = () => {
 
     return (
         <Select<string>
-            className="min-w-160"
+            className="min-w-140"
             value={locale}
             onChange={setLanguage}
             options={languageOptions}
+            suffixIcon={null}
         />
     );
 };

@@ -17,12 +17,9 @@ import { normalizeSpace } from 'utils/hepler'
 
 const SupplierManagement = () => {
     const { data, isLoading } = useSupplierListQuery()
-    const { mutateAsync: createSupplier, isPending: isCreating } =
-        useCreateSupplierMutation()
-    const { mutateAsync: updateSupplier, isPending: isUpdating } =
-        useUpdateSupplierMutation()
-    const { mutateAsync: deleteSupplier, isPending: isDeleting } =
-        useDeleteSupplierMutation()
+    const { mutateAsync: createSupplier, isPending: isCreating } = useCreateSupplierMutation()
+    const { mutateAsync: updateSupplier, isPending: isUpdating } = useUpdateSupplierMutation()
+    const { mutateAsync: deleteSupplier, isPending: isDeleting } = useDeleteSupplierMutation()
 
     const locale = useAppStore(state => state.locale)
     const intl = useIntl()
@@ -30,14 +27,12 @@ const SupplierManagement = () => {
     const [open, setOpen] = useState(false)
     const [mode, setMode] = useState<ModalActionMode>('create')
     const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null)
-
     const [form] = Form.useForm()
 
     if (isLoading) return <Spin fullscreen />
 
     const handleChangeMode = (mode: ModalActionMode, supplier?: Supplier) => {
         setMode(mode)
-
         switch (mode) {
             case 'create':
                 form.resetFields()
@@ -72,9 +67,7 @@ const SupplierManagement = () => {
     const handleSubmit = async () => {
         try {
             if (!selectedSupplier && mode !== 'create') return
-
             const values = mode === 'delete' ? null : await form.validateFields()
-
             switch (mode) {
                 case 'create':
                     await createSupplier(values)
@@ -89,7 +82,6 @@ const SupplierManagement = () => {
                     await deleteSupplier(selectedSupplier!.id)
                     break
             }
-
             handleClose()
         } catch (error) {
             console.error('Action failed:', error)
@@ -109,9 +101,7 @@ const SupplierManagement = () => {
             dataIndex: 'name',
             key: 'name',
             render: (_, record) => (
-                <Button
-                    type="link"
-                    className="px-0"
+                <Button type="link" className="px-0"
                     onClick={() => handleChangeMode('edit', record)}
                 >
                     {record.name}
@@ -143,31 +133,25 @@ const SupplierManagement = () => {
             title: <FormattedMessage id="table.column.created-at" />,
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: value =>
-                value
-                    ? dayjs(value).locale(locale).format(DATE_FORMAT_BY_LOCALE[locale])
-                    : '--/--/----',
-            sorter: (a, b) =>
-                dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
+            render: value => value
+                ? dayjs(value).locale(locale).format(DATE_FORMAT_BY_LOCALE[locale])
+                : '--/--/----',
+            sorter: (a, b) => dayjs(a.createdAt).valueOf() - dayjs(b.createdAt).valueOf(),
         },
         {
             title: <FormattedMessage id="table.column.updated-at" />,
             dataIndex: 'updatedAt',
             key: 'updatedAt',
-            render: value =>
-                value
-                    ? dayjs(value).locale(locale).format(DATE_FORMAT_BY_LOCALE[locale])
-                    : '--/--/----',
-            sorter: (a, b) =>
-                dayjs(a.updatedAt).valueOf() - dayjs(b.updatedAt).valueOf(),
+            render: value => value
+                ? dayjs(value).locale(locale).format(DATE_FORMAT_BY_LOCALE[locale])
+                : '--/--/----',
+            sorter: (a, b) => dayjs(a.updatedAt).valueOf() - dayjs(b.updatedAt).valueOf(),
         },
         {
             title: '',
             key: 'action',
             render: (_, record) => (
-                <Button
-                    type="primary"
-                    className="bg-red-5"
+                <Button type="primary" className="bg-red-3"
                     onClick={() => handleChangeMode('delete', record)}
                 >
                     <IconTrash height={18} width={18} />
@@ -180,9 +164,7 @@ const SupplierManagement = () => {
         <Flex vertical gap={12}>
             <Flex justify="space-between">
                 <Typography.Title level={5} className="m-0" />
-                <Button
-                    type="primary"
-                    size="large"
+                <Button type="primary" size="middle"
                     className="flex flex-row items-center gap-8"
                     onClick={() => handleChangeMode('create')}
                 >
@@ -202,31 +184,18 @@ const SupplierManagement = () => {
 
             <Modal
                 open={open}
-                title={
-                    <FormattedMessage
-                        id={`management.supplier.modal.title.${mode}-supplier`}
-                    />
-                }
+                title={<FormattedMessage id={`management.supplier.modal.title.${mode}-supplier`} />}
                 onCancel={handleClose}
                 onOk={handleSubmit}
-                okText={
-                    <FormattedMessage
-                        id={`management.supplier.modal.btn.${mode}`}
-                    />
-                }
+                okText={<FormattedMessage id={`management.supplier.modal.btn.${mode}`} />}
                 okButtonProps={{
-                    className: mode === 'delete' ? 'bg-red-5' : 'bg-main-primary',
+                    className: mode === 'delete' ? 'bg-red-3' : 'bg-main-primary',
                     loading: isCreating || isUpdating || isDeleting,
                 }}
-                cancelText={
-                    <FormattedMessage id="management.supplier.modal.btn.cancel" />
-                }
+                cancelText={<FormattedMessage id="management.supplier.modal.btn.cancel" />}
             >
                 {mode === 'delete' ? (
-                    <Flex
-                        vertical
-                        justify="center"
-                        align="center"
+                    <Flex vertical justify="center" align="center"
                         className="p-24 border-red-4 border-2 rounded-12"
                     >
                         <FormattedMessage id="management.supplier.modal.confirm-delete" />
@@ -238,29 +207,21 @@ const SupplierManagement = () => {
                     <Form form={form} layout="vertical" preserve={false}>
                         {/* NAME */}
                         <Form.Item
-                            label={
-                                <FormattedMessage id="management.supplier.modal.label.supplier-name" />
-                            }
+                            label={<FormattedMessage id="management.supplier.modal.label.supplier-name" />}
                             name="name"
                             normalize={normalizeSpace}
                             rules={[
                                 {
                                     required: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.name-is-required" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.name-is-required" />),
                                 },
                                 {
                                     whitespace: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.name-not-empty" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.name-not-empty" />),
                                 },
                                 {
                                     max: 64,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.name-max-length-is-64" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.name-max-length-is-64" />),
                                 },
                             ]}
                         >
@@ -273,28 +234,16 @@ const SupplierManagement = () => {
 
                         {/* EMAIL */}
                         <Form.Item
-                            label={
-                                <FormattedMessage id="management.supplier.modal.label.supplier-email" />
-                            }
+                            label={<FormattedMessage id="management.supplier.modal.label.supplier-email" />}
                             name="email"
                             rules={[
                                 {
-                                    required: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.email-is-required" />
-                                    ),
-                                },
-                                {
                                     type: 'email',
-                                    message: (
-                                        <FormattedMessage id="message.supplier.email-invalid" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.email-invalid" />),
                                 },
                                 {
                                     max: 128,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.email-max-length-is-128" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.email-max-length-is-128" />),
                                 },
                             ]}
                         >
@@ -307,28 +256,12 @@ const SupplierManagement = () => {
 
                         {/* PHONE */}
                         <Form.Item
-                            label={
-                                <FormattedMessage id="management.supplier.modal.label.supplier-phone" />
-                            }
+                            label={<FormattedMessage id="management.supplier.modal.label.supplier-phone" />}
                             name="phone"
                             rules={[
                                 {
-                                    required: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.phone-is-required" />
-                                    ),
-                                },
-                                {
-                                    whitespace: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.phone-not-empty" />
-                                    ),
-                                },
-                                {
                                     max: 20,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.phone-max-length-is-20" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.phone-max-length-is-20" />),
                                 },
                             ]}
                         >
@@ -341,28 +274,12 @@ const SupplierManagement = () => {
 
                         {/* ADDRESS */}
                         <Form.Item
-                            label={
-                                <FormattedMessage id="management.supplier.modal.label.supplier-address" />
-                            }
+                            label={<FormattedMessage id="management.supplier.modal.label.supplier-address" />}
                             name="address"
                             rules={[
                                 {
-                                    required: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.address-is-required" />
-                                    ),
-                                },
-                                {
-                                    whitespace: true,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.address-not-empty" />
-                                    ),
-                                },
-                                {
                                     max: 255,
-                                    message: (
-                                        <FormattedMessage id="message.supplier.address-max-length-is-255" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.address-max-length-is-255" />),
                                 },
                             ]}
                         >
@@ -375,16 +292,12 @@ const SupplierManagement = () => {
 
                         {/* DEBT */}
                         <Form.Item
-                            label={
-                                <FormattedMessage id="management.supplier.modal.label.supplier-debt" />
-                            }
+                            label={<FormattedMessage id="management.supplier.modal.label.supplier-debt" />}
                             name="debt"
                             rules={[
                                 {
                                     type: 'number',
-                                    message: (
-                                        <FormattedMessage id="message.supplier.debt-must-is-number" />
-                                    ),
+                                    message: (<FormattedMessage id="message.supplier.debt-must-is-number" />),
                                 },
                             ]}
                         >

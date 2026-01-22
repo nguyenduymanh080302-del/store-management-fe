@@ -3,6 +3,7 @@ import IconSales from './icon-sales.svg?react';
 import IconContent from './icon-content.svg?react';
 import IconAccountSettings from './icon-account-settings.svg?react';
 import IconPlus from './icon-plus.svg?react';
+import IconSetting from './icon-settings.svg?react';
 
 import IconVietnam from './countries/IconVietnamese';
 import IconEnglishUK from './countries/IconEnglishUK';
@@ -17,6 +18,8 @@ export {
     IconAccountSettings,
     IconPlus,
     IconTrash,
+    IconSetting,
+
     IconVietnam,
     IconEnglishUK,
     IconChinese,

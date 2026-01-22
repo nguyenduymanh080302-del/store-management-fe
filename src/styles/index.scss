@@ -8,6 +8,7 @@
 
 /* ===== Base ===== */
 :root {
+
     /* ===== Brand ===== */
     @each $key, $value in $main {
         --color-main-#{$key}: #{$value};
@@ -44,6 +45,27 @@
     }
 }
 
+@include generate-colors("main", $main);
+
+/* Neutral */
+@include generate-colors("neutral", $neutral);
+
+/* Cyan */
+@include generate-colors("cyan", $cyan);
+
+/* Blue */
+@include generate-colors("blue", $blue);
+
+/* Green */
+@include generate-colors("green", $green);
+
+/* Red */
+@include generate-colors("red", $red);
+
+/* Orange */
+@include generate-colors("orange", $orange);
+
+
 html,
 body {
     margin: 0;
@@ -69,22 +91,6 @@ body {
     background-color: map.get($main, secondary);
 }
 
-@include generate-colors("main", $main);
-
-/* Neutral */
-@include generate-colors("neutral", $neutral);
-
-/* Cyan */
-@include generate-colors("cyan", $cyan);
-
-/* Blue */
-@include generate-colors("blue", $blue);
-
-/* Green */
-@include generate-colors("green", $green);
-
-/* Red */
-@include generate-colors("red", $red);
-
-/* Orange */
-@include generate-colors("orange", $orange);
+.cursor-pointer {
+    cursor: pointer;
+}
