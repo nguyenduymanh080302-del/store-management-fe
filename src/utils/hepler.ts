@@ -69,7 +69,7 @@ export const getDefaultManagementRoute = (
     permissions: string[] = []
 ) => {
     return managementRoutes.find(route =>
-        permissions.includes(route.permission)
+        route.permission && permissions.includes(route.permission)
     );
 };
 

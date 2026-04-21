@@ -13,22 +13,22 @@ $border-radius: 0, 2, 4, 6, 8, 10, 12, 16, 20;
 
     .border-t-#{$w} {
         border-top-width: #{$w}px;
-        border-style: solid;
+        border-top-style: solid;
     }
 
     .border-r-#{$w} {
         border-right-width: #{$w}px;
-        border-style: solid;
+        border-right-style: solid;
     }
 
     .border-b-#{$w} {
         border-bottom-width: #{$w}px;
-        border-style: solid;
+        border-bottom-style: solid;
     }
 
     .border-l-#{$w} {
         border-left-width: #{$w}px;
-        border-style: solid;
+        border-left-style: solid;
     }
 }
 

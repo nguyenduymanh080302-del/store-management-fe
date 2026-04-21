@@ -1,8 +1,8 @@
 type Warehouse = {
     id: number
     name: string
-    products: Product[]
-    quantity: number
+    address?: string | null
+    isActive?: boolean
     createdAt: string
     updatedAt: string
 }

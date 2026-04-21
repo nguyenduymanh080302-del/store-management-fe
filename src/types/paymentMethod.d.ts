@@ -1,6 +1,7 @@
 type PaymentMethod = {
     id: number
-    method: string
+    name: string
+    isActive: boolean
     createdAt: string
     updatedAt: string
 }

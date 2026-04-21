@@ -10,6 +10,7 @@ type Account = {
     isActive: boolean
     roleId: number
     role: Role
+    warehouseId?: number | null
     createdAt: string
     updatedAt: string
 }
