@@ -32,8 +32,8 @@ type Order = {
     customerPhone: string
     customerAddress: string
     customerPayment: number
-    paymentMethodId: number
-    paymentMethod: PaymentMethod
+    paymentMethodId?: number
+    paymentMethod?: PaymentMethod
     vatValue: number
     discountValue?: number | null
     totalAmount: number
@@ -65,18 +65,18 @@ type CreateOrderPayload = {
     orderCode: string
     customerId?: number
     customerName: string
-    customerEmail: string
+    customerEmail?: string
     customerPhone: string
     customerAddress: string
     customerPayment: number
-    paymentMethodId: number
+    paymentMethodId?: number
     vatValue: number
     discountValue?: number
     totalAmount: number
     toPayAmount: number
     status?: OrderStatusValue
     deliveryId?: number
-    warehouseId: number
+    warehouseId?: number
     deliveryPerson?: string
     deliveryPhone?: string
     paidAmount?: number

@@ -25,7 +25,6 @@ import {
     useOrderListQuery,
     useUpdateOrderMutation,
 } from 'hooks/useOrder'
-import { usePaymentMethodListQuery } from 'hooks/usePaymentMethod'
 import { useProductListQuery } from 'hooks/useProduct'
 import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
@@ -47,7 +46,6 @@ type OrderLineFormValue = {
 type OrderFormValues = Omit<
     CreateOrderPayload,
     | 'customerId'
-    | 'paymentMethodId'
     | 'deliveryId'
     | 'warehouseId'
     | 'discountValue'
@@ -55,7 +53,6 @@ type OrderFormValues = Omit<
     | 'products'
 > & {
     customerId?: number | string
-    paymentMethodId?: number | string
     deliveryId?: number | string
     warehouseId?: number | string
     discountValue?: number | string
@@ -86,7 +83,6 @@ const normalizeOrderValues = (raw: OrderFormValues): CreateOrderPayload => ({
     customerPhone: raw.customerPhone,
     customerAddress: raw.customerAddress,
     customerPayment: Number(raw.customerPayment || 0),
-    paymentMethodId: Number(raw.paymentMethodId),
     vatValue: Number(raw.vatValue || 0),
     discountValue:
         raw.discountValue === undefined || raw.discountValue === ''
@@ -133,11 +129,21 @@ const SalesManagement = () => {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [form] = Form.useForm<OrderFormValues>()
 
+    // Product search popup state
+    const [productSearchOpen, setProductSearchOpen] = useState(false)
+    const [currentProductField, setCurrentProductField] = useState<number | null>(null)
+    const [productSearchValue, setProductSearchValue] = useState('')
+    const [debouncedProductSearch, setDebouncedProductSearch] = useState('')
+
     const { data, isLoading } = useOrderListQuery(filters)
     const { data: customerData } = useCustomerListQuery()
     const { data: deliveryData } = useDeliveryListQuery()
-    const { data: paymentMethodData } = usePaymentMethodListQuery()
     const { data: productData } = useProductListQuery({ page: 1, limit: 100 })
+    const { data: productSearchData } = useProductListQuery({
+        page: 1,
+        limit: 20,
+        search: debouncedProductSearch.trim() || undefined,
+    })
 
     const { mutateAsync: createOrder, isPending: isCreating } = useCreateOrderMutation()
     const { mutateAsync: updateOrder, isPending: isUpdating } = useUpdateOrderMutation()
@@ -145,8 +151,9 @@ const SalesManagement = () => {
 
     const customers = customerData?.data || []
     const deliveries = deliveryData?.data || []
-    const paymentMethods = (paymentMethodData?.data || []).filter((item) => item.isActive)
+    // const paymentMethods = (paymentMethodData?.data || []).filter((item) => item.isActive)
     const products = (productData?.data?.items || []).filter((item) => item.isActive)
+    const searchProducts = (productSearchData?.data?.items || []).filter((item) => item.isActive)
     const orderData = data?.data
     const orderList = orderData?.items || []
     const pagination = orderData?.pagination
@@ -185,6 +192,15 @@ const SalesManagement = () => {
         })
     }, [form, subtotal, vatValue, toPayAmount])
 
+    // Debounce product search
+    useEffect(() => {
+        const timeoutId = window.setTimeout(() => {
+            setDebouncedProductSearch(productSearchValue)
+        }, 300)
+
+        return () => window.clearTimeout(timeoutId)
+    }, [productSearchValue])
+
     if (isLoading) return <Spin fullscreen />
 
     const getProductById = (productId?: number | string) =>
@@ -192,6 +208,31 @@ const SalesManagement = () => {
 
     const getUnitByProduct = (productId?: number | string, unitId?: number | string) =>
         getProductById(productId)?.units.find((item) => item.unitId === Number(unitId))
+
+    // Product search popup handlers
+    const handleOpenProductSearch = (fieldName: number) => {
+        setCurrentProductField(fieldName)
+        const productId = form.getFieldValue(['products', fieldName, 'productId'])
+        const currentProduct = getProductById(productId)
+        setProductSearchValue(currentProduct?.name || '')
+        setDebouncedProductSearch(currentProduct?.name || '')
+        setProductSearchOpen(true)
+    }
+
+    const handleCloseProductSearch = () => {
+        setProductSearchOpen(false)
+        setCurrentProductField(null)
+        setProductSearchValue('')
+        setDebouncedProductSearch('')
+    }
+
+    const handleSelectProduct = (product: Product) => {
+        if (currentProductField !== null) {
+            handleProductChange(currentProductField, product.id)
+            form.setFieldValue(['products', currentProductField, 'productId'], product.id)
+        }
+        handleCloseProductSearch()
+    }
 
     const handleChangeMode = (nextMode: ModalActionMode, order?: Order) => {
         setMode(nextMode)
@@ -219,7 +260,6 @@ const SalesManagement = () => {
                         customerPhone: order.customerPhone,
                         customerAddress: order.customerAddress,
                         customerPayment: order.customerPayment,
-                        paymentMethodId: order.paymentMethodId,
                         vatValue: order.vatValue,
                         discountValue: order.discountValue ?? 0,
                         totalAmount: order.totalAmount,
@@ -344,12 +384,6 @@ const SalesManagement = () => {
         {
             title: <FormattedMessage id="table.column.customer" />,
             dataIndex: 'customerName',
-        },
-        {
-            title: (
-                <FormattedMessage id="table.column.payment" defaultMessage="Payment" />
-            ),
-            render: (_, record) => record.paymentMethod?.name || '--',
         },
         {
             title: (
@@ -556,7 +590,7 @@ const SalesManagement = () => {
                         </Row>
 
                         <Row gutter={12}>
-                            <Col xs={24} md={12}>
+                            <Col xs={24} md={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -579,40 +613,7 @@ const SalesManagement = () => {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    label={
-                                        <FormattedMessage
-                                            id="management.sales.form.label.payment-method"
-                                            defaultMessage="Payment Method"
-                                        />
-                                    }
-                                    name="paymentMethodId"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: (
-                                                <FormattedMessage
-                                                    id="message.sales.payment-method-is-required"
-                                                    defaultMessage="Payment method is required"
-                                                />
-                                            ),
-                                        },
-                                    ]}
-                                >
-                                    <Select
-                                        options={paymentMethods.map((item) => ({
-                                            label: item.name,
-                                            value: item.id,
-                                        }))}
-                                        placeholder={t('management.sales.form.placeholder.select-payment-method', 'Select payment method')}
-                                    />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={12}>
-                            <Col xs={24} md={12}>
+                            <Col xs={24} md={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -637,43 +638,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={12}>
-                                <Form.Item
-                                    label={
-                                        <FormattedMessage
-                                            id="management.sales.form.label.customer-email"
-                                            defaultMessage="Customer Email"
-                                        />
-                                    }
-                                    name="customerEmail"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: (
-                                                <FormattedMessage
-                                                    id="message.sales.customer-email-is-required"
-                                                    defaultMessage="Customer email is required"
-                                                />
-                                            ),
-                                        },
-                                        {
-                                            type: 'email',
-                                            message: (
-                                                <FormattedMessage
-                                                    id="message.sales.customer-email-invalid"
-                                                    defaultMessage="Invalid email address"
-                                                />
-                                            ),
-                                        },
-                                    ]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={12}>
-                            <Col xs={24} md={12}>
+                            <Col xs={24} md={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -706,7 +671,62 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={12}>
+                        </Row>
+
+                        <Row gutter={12}>
+                            <Col xs={24} md={10}>
+                                <Form.Item
+                                    label={
+                                        <FormattedMessage
+                                            id="management.sales.form.label.customer-address"
+                                            defaultMessage="Customer Address"
+                                        />
+                                    }
+                                    name="customerAddress"
+                                    normalize={normalizeSpace}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: (
+                                                <FormattedMessage
+                                                    id="message.sales.customer-address-is-required"
+                                                    defaultMessage="Customer address is required"
+                                                />
+                                            ),
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={7}>
+                                <Form.Item
+                                    label={
+                                        <FormattedMessage
+                                            id="management.sales.form.label.customer-email"
+                                            defaultMessage="Customer Email"
+                                        />
+                                    }
+                                    name="customerEmail"
+                                    rules={[
+                                        {
+                                            required: false,
+                                        },
+                                        {
+                                            type: 'email',
+                                            message: (
+                                                <FormattedMessage
+                                                    id="message.sales.customer-email-invalid"
+                                                    defaultMessage="Invalid email address"
+                                                />
+                                            ),
+                                        },
+                                    ]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={7}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -717,44 +737,21 @@ const SalesManagement = () => {
                                     name="warehouseId"
                                     rules={[
                                         {
-                                            required: true,
-                                            message: (
-                                                <FormattedMessage
-                                                    id="message.sales.warehouse-id-is-required"
-                                                    defaultMessage="Warehouse ID is required"
-                                                />
-                                            ),
+                                            required: false,
                                         },
                                     ]}
                                 >
-                                    <InputNumber min={1} className="w-full" />
+                                    <InputNumber className="w-full" />
                                 </Form.Item>
                             </Col>
                         </Row>
 
-                        <Form.Item
-                            label={
-                                <FormattedMessage
-                                    id="management.sales.form.label.customer-address"
-                                    defaultMessage="Customer Address"
-                                />
-                            }
-                            name="customerAddress"
-                            normalize={normalizeSpace}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: (
-                                        <FormattedMessage
-                                            id="message.sales.customer-address-is-required"
-                                            defaultMessage="Customer address is required"
-                                        />
-                                    ),
-                                },
-                            ]}
-                        >
-                            <Input />
-                        </Form.Item>
+                        <Row gutter={12}>
+
+
+                        </Row>
+
+
 
                         <Row gutter={12}>
                             <Col xs={24} md={8}>
@@ -906,16 +903,36 @@ const SalesManagement = () => {
                                                                 },
                                                             ]}
                                                         >
-                                                            <Select
-                                                                showSearch
-                                                                optionFilterProp="label"
-                                                                options={products.map((item) => ({
-                                                                    label: item.name,
-                                                                    value: item.id,
-                                                                }))}
-                                                                placeholder={t('management.sales.form.placeholder.select-product', 'Select product')}
-                                                                onChange={(value) => handleProductChange(field.name, value)}
-                                                            />
+                                                            <Flex
+                                                                onClick={() => handleOpenProductSearch(field.name)}
+                                                                className="border-1 border-neutral-4 rounded-8 p-12 cursor-pointer hover:border-main-primary"
+                                                                align="center"
+                                                                gap={12}
+                                                            >
+                                                                {currentProduct ? (
+                                                                    <>
+                                                                        {currentProduct.images?.[0]?.url && (
+                                                                            <img
+                                                                                src={currentProduct.images[0].url}
+                                                                                alt={currentProduct.name}
+                                                                                style={{
+                                                                                    width: 60,
+                                                                                    height: 60,
+                                                                                    objectFit: 'cover',
+                                                                                    borderRadius: 8,
+                                                                                }}
+                                                                            />
+                                                                        )}
+                                                                        <Typography.Text strong>
+                                                                            {currentProduct.name}
+                                                                        </Typography.Text>
+                                                                    </>
+                                                                ) : (
+                                                                    <Typography.Text type="secondary">
+                                                                        {t('management.sales.form.placeholder.select-product', 'Click to select product')}
+                                                                    </Typography.Text>
+                                                                )}
+                                                            </Flex>
                                                         </Form.Item>
                                                     </Col>
                                                     <Col xs={24} md={12}>
@@ -994,11 +1011,11 @@ const SalesManagement = () => {
                                                                 },
                                                             ]}
                                                         >
-                                                            <InputNumber 
-                                                                min={0} 
+                                                            <InputNumber
+                                                                min={0}
                                                                 className="w-full"
                                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                                parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                                                parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                                             />
                                                         </Form.Item>
                                                     </Col>
@@ -1012,11 +1029,11 @@ const SalesManagement = () => {
                                                             }
                                                             name={[field.name, 'extraPrice']}
                                                         >
-                                                            <InputNumber 
-                                                                min={0} 
+                                                            <InputNumber
+                                                                min={0}
                                                                 className="w-full"
                                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                                parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                                                parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                                             />
                                                         </Form.Item>
                                                     </Col>
@@ -1079,12 +1096,12 @@ const SalesManagement = () => {
                                     }
                                     name="totalAmount"
                                 >
-                                    <InputNumber 
-                                        min={0} 
-                                        className="w-full" 
+                                    <InputNumber
+                                        min={0}
+                                        className="w-full"
                                         readOnly
                                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                     />
                                 </Form.Item>
                             </Col>
@@ -1098,12 +1115,12 @@ const SalesManagement = () => {
                                     }
                                     name="vatValue"
                                 >
-                                    <InputNumber 
-                                        min={0} 
-                                        className="w-full" 
+                                    <InputNumber
+                                        min={0}
+                                        className="w-full"
                                         readOnly
                                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                     />
                                 </Form.Item>
                             </Col>
@@ -1117,11 +1134,11 @@ const SalesManagement = () => {
                                     }
                                     name="discountValue"
                                 >
-                                    <InputNumber 
-                                        min={0} 
+                                    <InputNumber
+                                        min={0}
                                         className="w-full"
                                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                     />
                                 </Form.Item>
                             </Col>
@@ -1135,11 +1152,11 @@ const SalesManagement = () => {
                                     }
                                     name="paidAmount"
                                 >
-                                    <InputNumber 
-                                        min={0} 
+                                    <InputNumber
+                                        min={0}
                                         className="w-full"
                                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                     />
                                 </Form.Item>
                             </Col>
@@ -1153,18 +1170,113 @@ const SalesManagement = () => {
                                     }
                                     name="toPayAmount"
                                 >
-                                    <InputNumber 
-                                        min={0} 
-                                        className="w-full" 
+                                    <InputNumber
+                                        min={0}
+                                        className="w-full"
                                         readOnly
                                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                     />
                                 </Form.Item>
                             </Col>
                         </Row>
                     </Form>
                 )}
+            </Modal>
+
+            {/* Product Search Modal */}
+            <Modal
+                open={productSearchOpen}
+                title={<FormattedMessage id="management.sales.form.label.select-product" defaultMessage="Select Product" />}
+                onCancel={handleCloseProductSearch}
+                footer={null}
+                width={700}
+                destroyOnClose
+            >
+                <Flex vertical gap={12}>
+                    <Input.Search
+                        allowClear
+                        value={productSearchValue}
+                        placeholder={intl.formatMessage({
+                            id: 'management.sales.form.placeholder.search-product',
+                            defaultMessage: 'Search product by name...',
+                        })}
+                        onChange={(e) => setProductSearchValue(e.target.value)}
+                        onSearch={(value) => setProductSearchValue(value)}
+                        size="large"
+                    />
+
+                    {productSearchValue.length < 2 ? (
+                        <Flex justify="center" align="center" className="p-24">
+                            <Typography.Text type="secondary">
+                                {intl.formatMessage({
+                                    id: 'management.sales.form.message.search-hint',
+                                    defaultMessage: 'Enter at least 2 characters to search',
+                                })}
+                            </Typography.Text>
+                        </Flex>
+                    ) : (
+                        <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+                            {searchProducts.length === 0 ? (
+                                <Flex justify="center" align="center" className="p-24">
+                                    <Typography.Text type="secondary">
+                                        {intl.formatMessage({
+                                            id: 'management.sales.form.message.no-products',
+                                            defaultMessage: 'No products found',
+                                        })}
+                                    </Typography.Text>
+                                </Flex>
+                            ) : (
+                                <Flex vertical gap={8}>
+                                    {searchProducts.map((product) => (
+                                        <Flex
+                                            key={product.id}
+                                            onClick={() => handleSelectProduct(product)}
+                                            className="border-1 border-neutral-4 rounded-12 p-12 cursor-pointer hover:border-main-primary"
+                                            align="center"
+                                            gap={12}
+                                        >
+                                            {product.images?.[0]?.url ? (
+                                                <img
+                                                    src={product.images[0].url}
+                                                    alt={product.name}
+                                                    style={{
+                                                        width: 120,
+                                                        height: 120,
+                                                        objectFit: 'cover',
+                                                        borderRadius: 8,
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div
+                                                    style={{
+                                                        width: 120,
+                                                        height: 120,
+                                                        backgroundColor: '#f5f5f5',
+                                                        borderRadius: 8,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                    }}
+                                                >
+                                                    <Typography.Text type="secondary">No Image</Typography.Text>
+                                                </div>
+                                            )}
+                                            <Flex vertical gap={4} style={{ flex: 1 }}>
+                                                <Typography.Text strong style={{ fontSize: 16 }}>
+                                                    {product.name}
+                                                </Typography.Text>
+                                                <Typography.Text type="secondary">
+                                                    {product.category?.name}
+                                                </Typography.Text>
+                                            </Flex>
+                                        </Flex>
+                                    ))}
+                                </Flex>
+                            )}
+                        </div>
+                    )}
+                </Flex>
             </Modal>
         </Flex>
     )

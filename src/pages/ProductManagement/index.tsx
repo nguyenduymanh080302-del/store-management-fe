@@ -532,7 +532,7 @@ const ProductManagement = () => {
                                                                     id: 'management.product.modal.placeholder.sell-price',
                                                                 })}
                                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                                parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                                                parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                                                 style={{ width: '100%' }}
                                                             />
                                                         </Form.Item>
@@ -598,7 +598,7 @@ const ProductManagement = () => {
                                                                                     id: 'management.product.modal.placeholder.extra-price',
                                                                                 })}
                                                                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                                                                parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                                                                                parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
                                                                             />
                                                                         </Form.Item>
 
