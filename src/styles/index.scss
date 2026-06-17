@@ -94,3 +94,8 @@ body {
 .cursor-pointer {
     cursor: pointer;
 }
+
+.management-layout-sidebar-menu .ant-menu-submenu-title,
+.management-layout-sidebar-menu .ant-menu-submenu-title .ant-menu-title-content {
+    font-weight: 600;
+}

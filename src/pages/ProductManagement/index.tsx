@@ -19,6 +19,7 @@ import type { UploadChangeParam, UploadFile } from 'antd/es/upload'
 import { IconPlus, IconTrash } from 'assets/icons'
 import FormattedMessage from 'components/FormattedMessage'
 import { useCategoryListQuery } from 'hooks/useCategory'
+import { useDebounce } from 'hooks/useDebounce'
 import {
     useCreateProductMutation,
     useDeleteProductMutation,
@@ -26,10 +27,10 @@ import {
     useUpdateProductMutation
 } from "hooks/useProduct"
 import { useUnitListQuery } from 'hooks/useUnit'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppStore } from 'stores/app.store'
-import { generatePathFromName, getBase64, normalizeSlug, normalizeSpace } from 'utils/hepler'
+import { generatePathFromName, getBase64, normalizeSlug, normalizeSpace, removeCharactersTone } from 'utils/hepler'
 
 type ProductFormExtraPriceValue = {
     label: string
@@ -98,21 +99,13 @@ const ProductManagement = () => {
     const [imageFileList, setImageFileList] = useState<UploadFile[]>([])
     const [deletedImageIds, setDeletedImageIds] = useState<number[]>([])
     const [searchValue, setSearchValue] = useState('')
-    const [debouncedSearchValue, setDebouncedSearchValue] = useState('')
+    const debouncedSearchValue = useDebounce(searchValue, 300)
     const [form] = Form.useForm<ProductFormValues>()
-
-    useEffect(() => {
-        const timeoutId = window.setTimeout(() => {
-            setDebouncedSearchValue(searchValue)
-        }, 300)
-
-        return () => window.clearTimeout(timeoutId)
-    }, [searchValue])
 
     const { data, isLoading } = useProductListQuery({
         page: 1,
         limit: 100,
-        search: debouncedSearchValue.trim() || undefined,
+        search: debouncedSearchValue.trim() ? removeCharactersTone(debouncedSearchValue.trim()) : undefined,
     })
     const { data: categoryData } = useCategoryListQuery()
     const { data: unitData } = useUnitListQuery()
@@ -123,8 +116,6 @@ const ProductManagement = () => {
 
     const locale = useAppStore(state => state.locale)
     const intl = useIntl()
-
-    if (isLoading) return <Spin fullscreen />
 
     const handleChangeMode = (mode: ModalActionMode, product?: Product) => {
         setMode(mode)
@@ -366,6 +357,7 @@ const ProductManagement = () => {
                 columns={columns}
                 dataSource={productList}
                 pagination={{ pageSize: 10 }}
+                loading={isLoading}
             />
 
             <Modal

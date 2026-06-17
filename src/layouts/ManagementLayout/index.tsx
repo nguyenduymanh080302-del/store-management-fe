@@ -53,12 +53,12 @@ const ManagementLayout = () => {
                     selectedKeys={selectedKeys}
                     defaultOpenKeys={openKeys}
                     onClick={({ key }) => navigate({ to: key as string })}
-                    className="mt-24"
+                    className="mt-24 management-layout-sidebar-menu"
                 />
             </Sider>
             <Layout>
                 <Header className="flex flex-row justify-between items-center p-16">
-                    <Typography.Title level={5} className="text-neutral-0 m-0">
+                    <Typography.Title level={5} className="text-neutral-0 m-0" style={{ fontWeight: 500 }}>
                         <FormattedMessage id={menuTitle ? `managment.sider.menu.${menuTitle}` : "managment.sider.menu.default"} />
                     </Typography.Title>
                     <Flex align="center" justify="space-between" gap={8}>
