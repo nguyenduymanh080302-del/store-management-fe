@@ -158,7 +158,6 @@
     "management.sales.form.label.available-extra-prices": "Available extra prices:",
     "order.status.pending": "Pending",
     "order.status.canceled": "Canceled",
-    "order.status.preparing": "Preparing",
     "order.status.delivering": "Delivering",
     "order.status.done": "Done",
     "----------------PRODUCT MANAGEMENT------------------": "",

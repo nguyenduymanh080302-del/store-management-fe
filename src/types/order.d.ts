@@ -1,4 +1,4 @@
-type OrderStatusValue = 'PENDING' | 'CANCELED' | 'PREPARING' | 'DELIVERING' | 'DONE'
+type OrderStatusValue = 'PENDING' | 'CANCELED' | 'DELIVERING' | 'DONE'
 
 type OrderProduct = {
     id: number
@@ -37,7 +37,6 @@ type Order = {
     vatValue: number
     discountValue?: number | null
     totalAmount: number
-    toPayAmount: number
     status: OrderStatusValue
     creatorId: number
     createdBy: Account
@@ -73,7 +72,6 @@ type CreateOrderPayload = {
     vatValue: number
     discountValue?: number
     totalAmount: number
-    toPayAmount: number
     status?: OrderStatusValue
     deliveryId?: number
     warehouseId?: number

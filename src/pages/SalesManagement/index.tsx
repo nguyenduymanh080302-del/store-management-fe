@@ -26,6 +26,7 @@ import {
     useUpdateOrderMutation,
 } from 'hooks/useOrder'
 import { useProductListQuery } from 'hooks/useProduct'
+import { useDebounce } from 'hooks/useDebounce'
 import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppStore } from 'stores/app.store'
@@ -63,7 +64,6 @@ type OrderFormValues = Omit<
 const statusColorMap: Record<ORDER_STATUS, string> = {
     [ORDER_STATUS.PENDING]: 'gold',
     [ORDER_STATUS.CANCELED]: 'red',
-    [ORDER_STATUS.PREPARING]: 'blue',
     [ORDER_STATUS.DELIVERING]: 'cyan',
     [ORDER_STATUS.DONE]: 'green',
 }
@@ -89,7 +89,6 @@ const normalizeOrderValues = (raw: OrderFormValues): CreateOrderPayload => ({
             ? undefined
             : Number(raw.discountValue),
     totalAmount: Number(raw.totalAmount || 0),
-    toPayAmount: Number(raw.toPayAmount || 0),
     status: raw.status || ORDER_STATUS.PENDING,
     deliveryId: raw.deliveryId ? Number(raw.deliveryId) : undefined,
     warehouseId: Number(raw.warehouseId),
@@ -133,13 +132,12 @@ const SalesManagement = () => {
     const [productSearchOpen, setProductSearchOpen] = useState(false)
     const [currentProductField, setCurrentProductField] = useState<number | null>(null)
     const [productSearchValue, setProductSearchValue] = useState('')
-    const [debouncedProductSearch, setDebouncedProductSearch] = useState('')
-
+    const debouncedProductSearch = useDebounce(productSearchValue, 500)
     const { data, isLoading } = useOrderListQuery(filters)
     const { data: customerData } = useCustomerListQuery()
     const { data: deliveryData } = useDeliveryListQuery()
     const { data: productData } = useProductListQuery({ page: 1, limit: 100 })
-    const { data: productSearchData } = useProductListQuery({
+    const { data: productSearchData, isLoading: isProductSearchLoading } = useProductListQuery({
         page: 1,
         limit: 20,
         search: debouncedProductSearch.trim() || undefined,
@@ -181,26 +179,14 @@ const SalesManagement = () => {
         return sum + ((sellPrice + extraPrice) * quantity * vatPercent) / 100
     }, 0)
 
-    const discountValue = Number(watchedDiscountValue || 0)
-    const toPayAmount = Math.max(subtotal + vatValue - discountValue, 0)
-
     useEffect(() => {
         form.setFieldsValue({
             totalAmount: Number(subtotal.toFixed(2)),
             vatValue: Number(vatValue.toFixed(2)),
-            toPayAmount: Number(toPayAmount.toFixed(2)),
         })
-    }, [form, subtotal, vatValue, toPayAmount])
+    }, [form, subtotal, vatValue])
 
     // Debounce product search
-    useEffect(() => {
-        const timeoutId = window.setTimeout(() => {
-            setDebouncedProductSearch(productSearchValue)
-        }, 300)
-
-        return () => window.clearTimeout(timeoutId)
-    }, [productSearchValue])
-
     if (isLoading) return <Spin fullscreen />
 
     const getProductById = (productId?: number | string) =>
@@ -215,7 +201,6 @@ const SalesManagement = () => {
         const productId = form.getFieldValue(['products', fieldName, 'productId'])
         const currentProduct = getProductById(productId)
         setProductSearchValue(currentProduct?.name || '')
-        setDebouncedProductSearch(currentProduct?.name || '')
         setProductSearchOpen(true)
     }
 
@@ -223,7 +208,6 @@ const SalesManagement = () => {
         setProductSearchOpen(false)
         setCurrentProductField(null)
         setProductSearchValue('')
-        setDebouncedProductSearch('')
     }
 
     const handleSelectProduct = (product: Product) => {
@@ -263,7 +247,6 @@ const SalesManagement = () => {
                         vatValue: order.vatValue,
                         discountValue: order.discountValue ?? 0,
                         totalAmount: order.totalAmount,
-                        toPayAmount: order.toPayAmount,
                         status: order.status,
                         deliveryId: order.deliveryId ?? undefined,
                         warehouseId: order.warehouseId,
@@ -401,13 +384,6 @@ const SalesManagement = () => {
                 <FormattedMessage id="table.column.total" defaultMessage="Total" />
             ),
             dataIndex: 'totalAmount',
-            render: (value: number) => formatAmount(value, locale),
-        },
-        {
-            title: (
-                <FormattedMessage id="table.column.to-pay" defaultMessage="To Pay" />
-            ),
-            dataIndex: 'toPayAmount',
             render: (value: number) => formatAmount(value, locale),
         },
         {
@@ -1160,25 +1136,6 @@ const SalesManagement = () => {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={4}>
-                                <Form.Item
-                                    label={
-                                        <FormattedMessage
-                                            id="management.sales.form.label.to-pay"
-                                            defaultMessage="To Pay"
-                                        />
-                                    }
-                                    name="toPayAmount"
-                                >
-                                    <InputNumber
-                                        min={0}
-                                        className="w-full"
-                                        readOnly
-                                        formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                        parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
-                                    />
-                                </Form.Item>
-                            </Col>
                         </Row>
                     </Form>
                 )}
@@ -1191,7 +1148,6 @@ const SalesManagement = () => {
                 onCancel={handleCloseProductSearch}
                 footer={null}
                 width={700}
-                destroyOnClose
             >
                 <Flex vertical gap={12}>
                     <Input.Search
@@ -1217,7 +1173,11 @@ const SalesManagement = () => {
                         </Flex>
                     ) : (
                         <div style={{ maxHeight: 400, overflowY: 'auto' }}>
-                            {searchProducts.length === 0 ? (
+                            {isProductSearchLoading ? (
+                                <Flex justify="center" align="center" className="p-24">
+                                    <Spin />
+                                </Flex>
+                            ) : searchProducts.length === 0 ? (
                                 <Flex justify="center" align="center" className="p-24">
                                     <Typography.Text type="secondary">
                                         {intl.formatMessage({

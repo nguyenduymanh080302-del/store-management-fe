@@ -16,7 +16,6 @@ export enum PERMISSION {
 export enum ORDER_STATUS {
     PENDING = 'PENDING',
     CANCELED = 'CANCELED',
-    PREPARING = 'PREPARING',
     DELIVERING = 'DELIVERING',
     DONE = 'DONE'
 }

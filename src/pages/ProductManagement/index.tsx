@@ -8,11 +8,10 @@ import {
     Modal,
     Row,
     Select,
-    Spin,
     Switch,
     Tag,
     Typography,
-    Upload,
+    Upload
 } from 'antd'
 import Table, { ColumnType } from 'antd/es/table'
 import type { UploadChangeParam, UploadFile } from 'antd/es/upload'
