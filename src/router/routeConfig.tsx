@@ -1,5 +1,5 @@
 import { lazyRouteComponent, RouteComponent } from '@tanstack/react-router'
-import { PERMISSION } from 'utils/enum'
+import { PERMISSION } from '@/utils/enum'
 
 type AppRoute = {
     path: string
@@ -11,12 +11,12 @@ type AppRoute = {
 export const authRoutes: AppRoute[] = [
     {
         path: '/login',
-        component: lazyRouteComponent(() => import('pages/Login')),
+        component: lazyRouteComponent(() => import('@/pages/Login')),
         isAuth: true,
     },
     {
         path: '/forgot-password',
-        component: lazyRouteComponent(() => import('pages/ForgotPassword')),
+        component: lazyRouteComponent(() => import('@/pages/ForgotPassword')),
         isAuth: true,
     },
 ]
@@ -24,47 +24,47 @@ export const authRoutes: AppRoute[] = [
 export const managementRoutes: AppRoute[] = [
     {
         path: '/dashboard',
-        component: lazyRouteComponent(() => import('pages/Dashboard')),
+        component: lazyRouteComponent(() => import('@/pages/Dashboard')),
         permission: PERMISSION.MANAGE_DASHBOARD,
     },
     {
         path: '/category',
-        component: lazyRouteComponent(() => import('pages/CategoryManagement')),
+        component: lazyRouteComponent(() => import('@/pages/CategoryManagement')),
         permission: PERMISSION.MANAGE_CONTENT,
     },
     {
         path: '/product',
-        component: lazyRouteComponent(() => import('pages/ProductManagement')),
+        component: lazyRouteComponent(() => import('@/pages/ProductManagement')),
         permission: PERMISSION.MANAGE_CONTENT,
     },
     {
         path: '/sales',
-        component: lazyRouteComponent(() => import('pages/SalesManagement')),
+        component: lazyRouteComponent(() => import('@/pages/SalesManagement')),
         permission: PERMISSION.MANAGE_SALES,
     },
     {
         path: '/customer',
-        component: lazyRouteComponent(() => import('pages/CustomerManagement')),
+        component: lazyRouteComponent(() => import('@/pages/CustomerManagement')),
         permission: PERMISSION.MANAGE_SALES,
     },
     {
         path: '/delivery',
-        component: lazyRouteComponent(() => import('pages/DeliveryManagement')),
+        component: lazyRouteComponent(() => import('@/pages/DeliveryManagement')),
         permission: PERMISSION.MANAGE_SALES,
     },
     {
         path: '/account',
-        component: lazyRouteComponent(() => import('pages/AccountManagement')),
+        component: lazyRouteComponent(() => import('@/pages/AccountManagement')),
         permission: PERMISSION.MANAGE_ACCOUNT,
     },
     {
         path: '/supplier',
-        component: lazyRouteComponent(() => import('pages/SupplierManagement')),
+        component: lazyRouteComponent(() => import('@/pages/SupplierManagement')),
         permission: PERMISSION.MANAGE_CONTENT,
     },
     {
         path: '/unit',
-        component: lazyRouteComponent(() => import('pages/UnitManagement')),
+        component: lazyRouteComponent(() => import('@/pages/UnitManagement')),
         permission: PERMISSION.MANAGE_CONTENT,
     },
 ]

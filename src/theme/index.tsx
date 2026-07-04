@@ -1,5 +1,5 @@
 import type { ThemeConfig } from "antd";
-import { color } from "./colors";
+import { color } from "@/theme/colors";
 
 export const themeConfig: ThemeConfig = {
     token: {

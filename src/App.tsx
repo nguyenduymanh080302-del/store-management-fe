@@ -1,11 +1,11 @@
 import { RouterProvider } from "@tanstack/react-router"
 import { App as AntDesign, ConfigProvider } from "antd"
-import { checkAuthentication } from "apis/auth.api"
-import Locales from "components/Locales"
+import { checkAuthentication } from "@/apis/auth.api"
+import Locales from "@/components/Locales"
 import { useEffect } from "react"
-import appRouter from "router"
-import { useAuthStore } from "stores/auth.store"
-import { themeConfig } from "theme"
+import appRouter from "@/router"
+import { useAuthStore } from "@/stores/auth.store"
+import { themeConfig } from "@/theme"
 
 function App() {
 

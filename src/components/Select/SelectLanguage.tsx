@@ -1,5 +1,5 @@
-import { useAppStore } from "stores/app.store";
-import { LANGUAGE } from "configs/locale.config";
+import { useAppStore } from "@/stores/app.store";
+import { LANGUAGE } from "@/configs/locale.config";
 import { Flex, Select } from "antd";
 
 const SelectLanguage = () => {

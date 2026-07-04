@@ -1,7 +1,7 @@
 import { Navigate } from '@tanstack/react-router'
 import { Spin } from 'antd'
-import { useAuthStore } from 'stores/auth.store'
-import { PERMISSION } from 'utils/enum'
+import { useAuthStore } from '@/stores/auth.store'
+import { PERMISSION } from '@/utils/enum'
 
 type Props = {
     permission?: PERMISSION

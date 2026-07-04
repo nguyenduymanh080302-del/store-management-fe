@@ -1,11 +1,11 @@
 import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { Flex, Image, Layout, Menu, MenuProps, Typography } from "antd";
-import logo from "assets/images/logo.png";
-import DropdownSetting from "components/Dropdown/DropdownSetting";
-import SelectLanguage from "components/Select/SelectLanguage";
-import { managementMenu } from "components/managmentMenu";
+import logo from "@/assets/images/logo.png";
+import DropdownSetting from "@/components/Dropdown/DropdownSetting";
+import SelectLanguage from "@/components/Select/SelectLanguage";
+import { managementMenu } from "@/components/managmentMenu";
 import { FormattedMessage } from "react-intl";
-import { useAuthStore } from "stores/auth.store";
+import { useAuthStore } from "@/stores/auth.store";
 const { Sider, Header, Content, Footer } = Layout;
 
 const ManagementLayout = () => {

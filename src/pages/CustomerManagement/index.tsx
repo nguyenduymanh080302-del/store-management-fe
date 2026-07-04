@@ -9,20 +9,20 @@ import {
     Typography,
 } from 'antd'
 import Table, { ColumnType } from 'antd/es/table'
-import { IconPlus, IconTrash } from 'assets/icons'
-import FormattedMessage from 'components/FormattedMessage'
+import { IconPlus, IconTrash } from '@/assets/icons'
+import FormattedMessage from '@/components/FormattedMessage'
 import dayjs from 'dayjs'
 import {
     useCustomerListQuery,
     useCreateCustomerMutation,
     useUpdateCustomerMutation,
     useDeleteCustomerMutation,
-} from 'hooks/useCustomer'
+} from '@/hooks/useCustomer'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useAppStore } from 'stores/app.store'
-import { DATE_FORMAT_BY_LOCALE } from 'utils/constant'
-import { normalizeSpace } from 'utils/hepler'
+import { useAppStore } from '@/stores/app.store'
+import { DATE_FORMAT_BY_LOCALE } from '@/utils/constant'
+import { normalizeSpace } from '@/utils/hepler'
 
 const CustomerManagement = () => {
     const { data, isLoading } = useCustomerListQuery()

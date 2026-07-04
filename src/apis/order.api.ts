@@ -1,4 +1,4 @@
-import axios from '../configs/axios'
+import axios from '@/configs/axios'
 
 export const fetchOrderList = async (
     params?: GetOrdersQuery

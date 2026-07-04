@@ -1,4 +1,4 @@
-import axios from "../configs/axios"
+import axios from "@/configs/axios"
 
 export const fetchCategoryList = async (): Promise<ApiResponse<Category[]>> => {
     const res = await axios.get('/category')

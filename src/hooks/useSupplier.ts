@@ -5,7 +5,7 @@ import {
     createSupplier,
     updateSupplier,
     deleteSupplier,
-} from 'apis/supplier.api'
+} from '@/apis/supplier.api'
 
 /* ======================
    QUERY KEYS

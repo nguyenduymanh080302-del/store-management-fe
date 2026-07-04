@@ -5,7 +5,7 @@ import {
     createProduct,
     updateProduct,
     deleteProduct
-} from "apis/product.api"
+} from "@/apis/product.api"
 
 /* ======================
    QUERY KEYS

@@ -1,4 +1,4 @@
-import axios from "../configs/axios";
+import axios from "@/configs/axios";
 
 // READ ALL
 export const fetchCustomerList = async (): Promise<ApiResponse<Customer[]>> => {

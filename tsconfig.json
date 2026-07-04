@@ -24,10 +24,9 @@
     "typeRoots": [
       "./types"
     ],
-    "baseUrl": "src",
     "paths": {
-      "/*": [
-        "src/*"
+      "@/*": [
+        "./src/*"
       ]
     }
   },

@@ -1,19 +1,19 @@
 import { Button, Flex, Form, Input, InputNumber, Modal, Spin, Typography } from 'antd'
 import Table, { ColumnType } from 'antd/es/table'
-import { IconPlus, IconTrash } from 'assets/icons'
-import FormattedMessage from 'components/FormattedMessage'
+import { IconPlus, IconTrash } from '@/assets/icons'
+import FormattedMessage from '@/components/FormattedMessage'
 import dayjs from 'dayjs'
 import {
     useSupplierListQuery,
     useCreateSupplierMutation,
     useUpdateSupplierMutation,
     useDeleteSupplierMutation,
-} from 'hooks/useSupplier'
+} from '@/hooks/useSupplier'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useAppStore } from 'stores/app.store'
-import { DATE_FORMAT_BY_LOCALE } from 'utils/constant'
-import { normalizeSpace } from 'utils/hepler'
+import { useAppStore } from '@/stores/app.store'
+import { DATE_FORMAT_BY_LOCALE } from '@/utils/constant'
+import { normalizeSpace } from '@/utils/hepler'
 
 const SupplierManagement = () => {
     const { data, isLoading } = useSupplierListQuery()

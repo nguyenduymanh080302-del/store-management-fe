@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchUnitList, fetchUnitById, createUnit, updateUnit, deleteUnit } from 'apis/unit.api'
+import { fetchUnitList, fetchUnitById, createUnit, updateUnit, deleteUnit } from '@/apis/unit.api'
 
 /* ======================
    QUERY KEYS

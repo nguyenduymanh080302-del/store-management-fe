@@ -1,9 +1,9 @@
 import { useNavigate } from '@tanstack/react-router'
 import { Dropdown, MenuProps } from 'antd'
-import { IconSetting } from 'assets/icons'
-import FormattedMessage from 'components/FormattedMessage'
-import { useAuthStore } from 'stores/auth.store'
-import "./DropdownSetting.scss"
+import { IconSetting } from '@/assets/icons'
+import FormattedMessage from '@/components/FormattedMessage'
+import { useAuthStore } from '@/stores/auth.store'
+import "@/components/Dropdown/DropdownSetting"
 
 const DropdownSetting = () => {
 

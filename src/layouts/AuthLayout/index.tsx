@@ -1,9 +1,9 @@
 // src/layouts/AuthLayout.tsx
 import { Outlet } from "@tanstack/react-router";
 import { Flex, Image, Layout, Typography } from "antd";
-import auth_layout_bg from "assets/images/auth-layout-bg.png";
-import logo from "assets/images/logo.png";
-import SelectLanguage from "components/Select/SelectLanguage";
+import auth_layout_bg from "@/assets/images/auth-layout-bg.png";
+import logo from "@/assets/images/logo.png";
+import SelectLanguage from "@/components/Select/SelectLanguage";
 import "./AuthLayout.scss";
 
 const { Header, Content, Footer } = Layout;

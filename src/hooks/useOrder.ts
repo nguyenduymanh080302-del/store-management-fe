@@ -5,7 +5,7 @@ import {
     fetchOrderById,
     fetchOrderList,
     updateOrder,
-} from 'apis/order.api'
+} from '@/apis/order.api'
 
 export const ORDER_QUERY_KEY = {
     all: ['orders'] as const,

@@ -15,21 +15,21 @@ import {
 } from 'antd'
 import Table, { ColumnType } from 'antd/es/table'
 import type { UploadChangeParam, UploadFile } from 'antd/es/upload'
-import { IconPlus, IconTrash } from 'assets/icons'
-import FormattedMessage from 'components/FormattedMessage'
-import { useCategoryListQuery } from 'hooks/useCategory'
-import { useDebounce } from 'hooks/useDebounce'
+import { IconPlus, IconTrash } from '@/assets/icons'
+import FormattedMessage from '@/components/FormattedMessage'
+import { useCategoryListQuery } from '@/hooks/useCategory'
+import { useDebounce } from '@/hooks/useDebounce'
 import {
     useCreateProductMutation,
     useDeleteProductMutation,
     useProductListQuery,
     useUpdateProductMutation
-} from "hooks/useProduct"
-import { useUnitListQuery } from 'hooks/useUnit'
+} from "@/hooks/useProduct"
+import { useUnitListQuery } from '@/hooks/useUnit'
 import { useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useAppStore } from 'stores/app.store'
-import { generatePathFromName, getBase64, normalizeSlug, normalizeSpace, removeCharactersTone } from 'utils/hepler'
+import { useAppStore } from '@/stores/app.store'
+import { generatePathFromName, getBase64, normalizeSlug, normalizeSpace, removeCharactersTone } from '@/utils/hepler'
 
 type ProductFormExtraPriceValue = {
     label: string

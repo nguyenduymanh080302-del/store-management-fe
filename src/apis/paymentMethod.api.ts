@@ -1,4 +1,4 @@
-import axios from '../configs/axios'
+import axios from '@/configs/axios'
 
 export const fetchPaymentMethodList = async (): Promise<ApiResponse<PaymentMethod[]>> => {
     const res = await axios.get('/payment-method')

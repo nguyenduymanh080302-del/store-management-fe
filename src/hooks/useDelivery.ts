@@ -5,7 +5,7 @@ import {
     createDelivery,
     updateDelivery,
     deleteDelivery,
-} from 'apis/delivery.api'
+} from '@/apis/delivery.api'
 
 /* ======================
    QUERY KEYS

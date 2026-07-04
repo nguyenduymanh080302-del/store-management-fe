@@ -5,7 +5,7 @@ import {
     createCustomer,
     updateCustomer,
     deleteCustomer,
-} from 'apis/customer.api'
+} from '@/apis/customer.api'
 
 /* ======================
    QUERY KEYS

@@ -1,9 +1,9 @@
 import { Link, Navigate, useNavigate } from '@tanstack/react-router'
 import { App, Button, Card, Form, Input } from 'antd'
 import { HttpStatusCode } from 'axios'
-import { useSignin } from 'hooks'
+import { useSignin } from '@/hooks'
 import { FormattedMessage } from 'react-intl'
-import { useAuthStore } from 'stores/auth.store'
+import { useAuthStore } from '@/stores/auth.store'
 import "./Login.scss"
 
 const Login = () => {

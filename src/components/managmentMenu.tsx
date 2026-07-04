@@ -1,6 +1,6 @@
 // managementMenu.config.ts
-import { IconAccountSettings, IconContent, IconDashboard, IconSales } from "assets/icons"
-import { PERMISSION } from "utils/enum"
+import { IconAccountSettings, IconContent, IconDashboard, IconSales } from "@/assets/icons"
+import { PERMISSION } from "@/utils/enum"
 
 interface ManagementMenuItem {
     key: string

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IntlProvider, MessageFormatElement } from "react-intl";
 
-import { useAppStore } from "stores/app.store";
+import { useAppStore } from "@/stores/app.store";
 
 type Messages =
     | Record<string, string>
@@ -9,7 +9,7 @@ type Messages =
 
 const loadLocaleData = async (locale: string): Promise<{ default: Messages }> => {
     return await import(`utils/locales/${locale}.json`).catch(() =>
-        import("utils/locales/vi.json")
+        import("@/utils/locales/vi.json")
     );
 };
 

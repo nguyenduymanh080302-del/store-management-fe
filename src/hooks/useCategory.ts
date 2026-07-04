@@ -5,7 +5,7 @@ import {
     createCategory,
     updateCategory,
     deleteCategory,
-} from "apis/category.api";
+} from "@/apis/category.api";
 
 /* ======================
    QUERY KEYS

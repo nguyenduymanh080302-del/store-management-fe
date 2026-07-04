@@ -1,4 +1,4 @@
-import axios from "../configs/axios"
+import axios from "@/configs/axios"
 
 export const fetchUnitList = async (): Promise<ApiResponse<Unit[]>> => {
     const res = await axios.get('/unit')

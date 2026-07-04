@@ -1,4 +1,4 @@
-import { managementRoutes } from "router/routeConfig";
+import { managementRoutes } from "@/router/routeConfig";
 
 export type FileLike = Blob | File;
 

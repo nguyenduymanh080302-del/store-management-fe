@@ -1,5 +1,5 @@
 // apis/delivery.api.ts
-import axios from '../configs/axios'
+import axios from '@/configs/axios'
 // READ ALL
 export const fetchDeliveryList = async (): Promise<ApiResponse<Delivery[]>> => {
     const res = await axios.get('/delivery')

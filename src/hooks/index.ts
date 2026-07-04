@@ -1,2 +1,2 @@
-export { useLocale } from './useLocale';
-export { useSignin } from "./useAuth"
+export { useLocale } from '@/hooks/useLocale';
+export { useSignin } from "@/hooks/useAuth"

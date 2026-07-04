@@ -4,10 +4,10 @@ import {
     createRouter
 } from '@tanstack/react-router'
 
-import AuthLayout from 'layouts/AuthLayout'
-import ManagementLayout from 'layouts/ManagementLayout'
-import { PermissionGuard } from './PermissionGuard'
-import { authRoutes, managementRoutes } from './routeConfig'
+import AuthLayout from '@/layouts/AuthLayout'
+import ManagementLayout from '@/layouts/ManagementLayout'
+import { PermissionGuard } from '@/router/PermissionGuard'
+import { authRoutes, managementRoutes } from '@/router/routeConfig'
 import { Spin } from 'antd'
 
 const rootRoute = createRootRoute()

@@ -14,26 +14,26 @@ import {
     Typography,
 } from 'antd'
 import type { ColumnType } from 'antd/es/table'
-import { IconPlus, IconTrash } from 'assets/icons'
-import FormattedMessage from 'components/FormattedMessage'
+import { IconPlus, IconTrash } from '@/assets/icons'
+import FormattedMessage from '@/components/FormattedMessage'
 import dayjs from 'dayjs'
-import { useCustomerListQuery } from 'hooks/useCustomer'
-import { useDeliveryListQuery } from 'hooks/useDelivery'
+import { useCustomerListQuery } from '@/hooks/useCustomer'
+import { useDeliveryListQuery } from '@/hooks/useDelivery'
 import {
     useCreateOrderMutation,
     useDeleteOrderMutation,
     useOrderListQuery,
     useUpdateOrderMutation,
-} from 'hooks/useOrder'
-import { useProductListQuery } from 'hooks/useProduct'
-import { useDebounce } from 'hooks/useDebounce'
+} from '@/hooks/useOrder'
+import { useProductListQuery } from '@/hooks/useProduct'
+import { useDebounce } from '@/hooks/useDebounce'
 import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { useAppStore } from 'stores/app.store'
-import { useAuthStore } from 'stores/auth.store'
-import { DATE_FORMAT_BY_LOCALE } from 'utils/constant'
-import { ORDER_STATUS } from 'utils/enum'
-import { normalizeSpace } from 'utils/hepler'
+import { useAppStore } from '@/stores/app.store'
+import { useAuthStore } from '@/stores/auth.store'
+import { DATE_FORMAT_BY_LOCALE } from '@/utils/constant'
+import { ORDER_STATUS } from '@/utils/enum'
+import { normalizeSpace } from '@/utils/hepler'
 
 type OrderLineFormValue = {
     productId?: number | string
@@ -162,7 +162,6 @@ const SalesManagement = () => {
     }))
 
     const watchedProducts = Form.useWatch('products', form) || []
-    const watchedDiscountValue = Form.useWatch('discountValue', form)
 
     const subtotal = watchedProducts.reduce((sum: number, item: OrderLineFormValue) => {
         const quantity = Number(item?.quantity || 0)

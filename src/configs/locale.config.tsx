@@ -1,6 +1,6 @@
 
-import { IconChinese, IconEnglishUK, IconJapanese } from "assets/icons";
-import IconVietnamese from "assets/icons/countries/IconVietnamese";
+import { IconChinese, IconEnglishUK, IconJapanese } from "@/assets/icons";
+import IconVietnamese from "@/assets/icons/countries/IconVietnamese";
 
 // src/config/locales.ts
 export const LANGUAGE: Record<Language, {

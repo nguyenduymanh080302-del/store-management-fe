@@ -1,4 +1,4 @@
-import axios from "../configs/axios";
+import axios from "@/configs/axios";
 
 const buildProductFormData = (
     data: CreateProductPayload | UpdateProductPayload,
