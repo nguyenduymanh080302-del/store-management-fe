@@ -21,8 +21,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "typeRoots": [
-      "./types"
+    "types": [
+      "vite/client"
     ],
     "paths": {
       "@/*": [

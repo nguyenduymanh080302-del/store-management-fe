@@ -6,3 +6,9 @@ type Warehouse = {
     createdAt: string
     updatedAt: string
 }
+
+type CreateWarehousePayload = Pick<Warehouse, 'name' | 'address' | 'isActive'>
+
+type UpdateWarehousePayload = Partial<CreateWarehousePayload> & {
+    id: number
+}

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { IntlProvider, MessageFormatElement } from "react-intl";
-
 import { useAppStore } from "@/stores/app.store";
 
 type Messages =
     | Record<string, string>
     | Record<string, MessageFormatElement[]>;
 
+const locales = import.meta.glob("../utils/locales/*.json", {
+    eager: true,
+    import: "default",
+}) as Record<string, Messages>;
+
 const loadLocaleData = async (locale: string): Promise<{ default: Messages }> => {
-    return await import(`utils/locales/${locale}.json`).catch(() =>
-        import("@/utils/locales/vi.json")
-    );
+    const localeData = await locales[`../utils/locales/${locale}.json`] ?? locales["../utils/locales/vi.json"];
+    return { default: localeData };
 };
 
 type Props = {

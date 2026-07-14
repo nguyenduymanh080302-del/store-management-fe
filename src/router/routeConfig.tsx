@@ -67,4 +67,9 @@ export const managementRoutes: AppRoute[] = [
         component: lazyRouteComponent(() => import('@/pages/UnitManagement')),
         permission: PERMISSION.MANAGE_CONTENT,
     },
+    {
+        path: '/warehouse',
+        component: lazyRouteComponent(() => import('@/pages/WarehouseManagement')),
+        permission: PERMISSION.MANAGE_WAREHOUSE,
+    },
 ]
