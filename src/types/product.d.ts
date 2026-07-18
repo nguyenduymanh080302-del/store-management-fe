@@ -10,6 +10,7 @@ type ProductUnitExtraPrice = {
 
 type ProductUnit = {
     unitId: number
+    importPrice?: number
     sellPrice: number
     vatPercent: number
     extraPrices?: ProductUnitExtraPrice[]
@@ -37,6 +38,7 @@ type ProductExtraPricePayload = {
 
 type ProductUnitPayload = {
     unitId: number
+    importPrice?: number
     sellPrice: number
     vatPercent: number
     extraPrices?: ProductExtraPricePayload[]
