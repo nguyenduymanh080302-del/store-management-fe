@@ -22,7 +22,6 @@
     "react-hook-form": "^7.68.0",
     "react-intl": "^7.1.14",
     "tsconfig": "^7.0.0",
-    "uninstall": "^0.0.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, type ReactNode } from "react";
 import { IntlProvider, MessageFormatElement } from "react-intl";
 
 import { useAppStore } from "@/stores/app.store";
@@ -14,10 +14,10 @@ const loadLocaleData = async (locale: string): Promise<{ default: Messages }> =>
 };
 
 type Props = {
-    children: React.ReactNode;
+    children: ReactNode;
 };
 
-const Locales: React.FC<Props> = ({ children }) => {
+const Locales = ({ children }: Props) => {
     const locale = useAppStore((s) => s.locale);
 
     const [messages, setMessages] = useState<Messages | null>(null);

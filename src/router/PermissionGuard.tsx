@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react'
 import { Navigate } from '@tanstack/react-router'
 import { Spin } from 'antd'
 import { useAuthStore } from '@/stores/auth.store'
@@ -5,7 +6,7 @@ import { PERMISSION } from '@/utils/enum'
 
 type Props = {
     permission?: PERMISSION
-    children: React.ReactNode
+    children: ReactNode
 }
 
 export function PermissionGuard({ permission, children }: Props) {

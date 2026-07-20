@@ -1,11 +1,12 @@
 // managementMenu.config.ts
+import { type ReactNode } from 'react'
 import { IconAccountSettings, IconContent, IconDashboard, IconSales } from "@/assets/icons"
 import { PERMISSION } from "@/utils/enum"
 
 interface ManagementMenuItem {
     key: string
     labelId: string
-    icon?: React.ReactNode
+    icon?: ReactNode
     permission: PERMISSION
     children?: ManagementMenuItem[]
 }

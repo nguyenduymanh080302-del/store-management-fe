@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
 type UseLocaleResult = {
@@ -8,16 +7,11 @@ type UseLocaleResult = {
 
 export const useLocale = (): UseLocaleResult => {
   const intl = useIntl();
-  const formatMessage = useCallback(
-    (id: string, values?: Record<string, any>) => {
-      return intl.formatMessage({ id }, values);
-    },
-    [intl]
-  );
 
   return {
-    formatMessage,
-    intl
+    formatMessage: (id: string, values?: Record<string, any>) =>
+      intl.formatMessage({ id }, values),
+    intl,
   };
 };
 
