@@ -6,9 +6,11 @@ import SelectLanguage from "@/components/Select/SelectLanguage";
 import { managementMenu } from "@/components/managmentMenu";
 import { FormattedMessage } from "react-intl";
 import { useAuthStore } from "@/stores/auth.store";
+import { useState } from "react";
 const { Sider, Header, Content, Footer } = Layout;
 
 const ManagementLayout = () => {
+    const [collapsed, setCollapsed] = useState(false)
 
     const navigate = useNavigate()
     const pathname = useRouterState().location.pathname
@@ -45,15 +47,23 @@ const ManagementLayout = () => {
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
-            <Sider width={220} >
-                <Image src={logo} preview={false} className="object-cover" />
+            <Sider
+                width={220}
+                collapsed={collapsed}
+                collapsedWidth={44}
+                breakpoint="md"
+                trigger={null}
+                onBreakpoint={setCollapsed}
+            >
+                {!collapsed && <Image src={logo} preview={false} className="object-cover" />}
                 <Menu
                     mode="inline"
+                    inlineCollapsed={collapsed}
                     items={buildMenuItems()}
                     selectedKeys={selectedKeys}
                     defaultOpenKeys={openKeys}
                     onClick={({ key }) => navigate({ to: key as string })}
-                    className="mt-24 management-layout-sidebar-menu"
+                    className="mb-24 management-layout-sidebar-menu"
                 />
             </Sider>
             <Layout>

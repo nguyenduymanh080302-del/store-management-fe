@@ -9,6 +9,8 @@ type OrderProduct = {
     sellPrice: number
     extraPrice: number
     vatPercent: number
+    warehouseId?: number | null
+    warehouse?: Warehouse | null
     createdAt: string
     updatedAt: string
     productUnit: {
@@ -42,7 +44,6 @@ type Order = {
     createdBy: Account
     deliveryId?: number | null
     delivery?: Delivery | null
-    warehouseId: number
     deliveryPerson?: string | null
     deliveryPhone?: string | null
     paidAmount?: number | null
@@ -52,6 +53,7 @@ type Order = {
 }
 
 type OrderProductPayload = {
+    warehouseId: number
     productId: number
     unitId: number
     quantity: number
@@ -74,7 +76,6 @@ type CreateOrderPayload = {
     totalAmount: number
     status?: OrderStatusValue
     deliveryId?: number
-    warehouseId?: number
     deliveryPerson?: string
     deliveryPhone?: string
     paidAmount?: number

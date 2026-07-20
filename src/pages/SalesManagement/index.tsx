@@ -26,16 +26,17 @@ import {
     useUpdateOrderMutation,
 } from '@/hooks/useOrder'
 import { useProductListQuery } from '@/hooks/useProduct'
+import { useWarehouseListQuery } from '@/hooks/useWarehouse'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import { useAppStore } from '@/stores/app.store'
-import { useAuthStore } from '@/stores/auth.store'
 import { DATE_FORMAT_BY_LOCALE } from '@/utils/constant'
 import { ORDER_STATUS } from '@/utils/enum'
 import { normalizeSpace } from '@/utils/hepler'
 
 type OrderLineFormValue = {
+    warehouseId?: number | string
     productId?: number | string
     unitId?: number | string
     quantity?: number | string
@@ -48,14 +49,12 @@ type OrderFormValues = Omit<
     CreateOrderPayload,
     | 'customerId'
     | 'deliveryId'
-    | 'warehouseId'
     | 'discountValue'
     | 'paidAmount'
     | 'products'
 > & {
     customerId?: number | string
     deliveryId?: number | string
-    warehouseId?: number | string
     discountValue?: number | string
     paidAmount?: number | string
     products?: OrderLineFormValue[]
@@ -91,7 +90,6 @@ const normalizeOrderValues = (raw: OrderFormValues): CreateOrderPayload => ({
     totalAmount: Number(raw.totalAmount || 0),
     status: raw.status || ORDER_STATUS.PENDING,
     deliveryId: raw.deliveryId ? Number(raw.deliveryId) : undefined,
-    warehouseId: Number(raw.warehouseId),
     deliveryPerson: raw.deliveryPerson || undefined,
     deliveryPhone: raw.deliveryPhone || undefined,
     paidAmount:
@@ -99,6 +97,7 @@ const normalizeOrderValues = (raw: OrderFormValues): CreateOrderPayload => ({
             ? undefined
             : Number(raw.paidAmount),
     products: (raw.products || []).map((item) => ({
+        warehouseId: Number(item.warehouseId),
         productId: Number(item.productId),
         unitId: Number(item.unitId),
         quantity: Number(item.quantity),
@@ -113,7 +112,6 @@ const normalizeOrderValues = (raw: OrderFormValues): CreateOrderPayload => ({
 
 const SalesManagement = () => {
     const locale = useAppStore((state) => state.locale)
-    const account = useAuthStore((state) => state.account)
     const intl = useIntl()
     const t = (id: string, defaultMessage: string) =>
         intl.formatMessage({ id, defaultMessage })
@@ -136,6 +134,7 @@ const SalesManagement = () => {
     const { data, isLoading } = useOrderListQuery(filters)
     const { data: customerData } = useCustomerListQuery()
     const { data: deliveryData } = useDeliveryListQuery()
+    const { data: warehouseData, isLoading: isWarehousesLoading } = useWarehouseListQuery()
     const { data: productData } = useProductListQuery({ page: 1, limit: 100 })
     const { data: productSearchData, isLoading: isProductSearchLoading } = useProductListQuery({
         page: 1,
@@ -149,6 +148,7 @@ const SalesManagement = () => {
 
     const customers = customerData?.data || []
     const deliveries = deliveryData?.data || []
+    const warehouses = warehouseData?.data || []
     // const paymentMethods = (paymentMethodData?.data || []).filter((item) => item.isActive)
     const products = (productData?.data?.items || []).filter((item) => item.isActive)
     const searchProducts = (productSearchData?.data?.items || []).filter((item) => item.isActive)
@@ -226,7 +226,6 @@ const SalesManagement = () => {
                 form.setFieldsValue({
                     orderCode: generateOrderCode(),
                     status: ORDER_STATUS.PENDING,
-                    warehouseId: account?.warehouseId ?? undefined,
                     discountValue: 0,
                     customerPayment: 0,
                     paidAmount: 0,
@@ -248,11 +247,11 @@ const SalesManagement = () => {
                         totalAmount: order.totalAmount,
                         status: order.status,
                         deliveryId: order.deliveryId ?? undefined,
-                        warehouseId: order.warehouseId,
                         deliveryPerson: order.deliveryPerson ?? undefined,
                         deliveryPhone: order.deliveryPhone ?? undefined,
                         paidAmount: order.paidAmount ?? 0,
                         products: order.products.map((item) => ({
+                            warehouseId: item.warehouseId ?? undefined,
                             productId: item.productId,
                             unitId: item.unitId,
                             quantity: item.quantity,
@@ -334,6 +333,7 @@ const SalesManagement = () => {
         const firstUnit = product?.units[0]
 
         form.setFieldValue(['products', index, 'unitId'], firstUnit?.unitId)
+        form.setFieldValue(['products', index, 'warehouseId'], undefined)
         form.setFieldValue(['products', index, 'sellPrice'], firstUnit?.sellPrice ?? 0)
         form.setFieldValue(['products', index, 'extraPrice'], 0)
         form.setFieldValue(['products', index, 'vatPercent'], firstUnit?.vatPercent ?? 0)
@@ -343,6 +343,7 @@ const SalesManagement = () => {
         const productId = form.getFieldValue(['products', index, 'productId'])
         const unit = getUnitByProduct(productId, unitId)
 
+        form.setFieldValue(['products', index, 'warehouseId'], undefined)
         form.setFieldValue(['products', index, 'sellPrice'], unit?.sellPrice ?? 0)
         form.setFieldValue(['products', index, 'extraPrice'], 0)
         form.setFieldValue(['products', index, 'vatPercent'], unit?.vatPercent ?? 0)
@@ -523,7 +524,7 @@ const SalesManagement = () => {
                 ) : (
                     <Form form={form} layout="vertical" preserve={false}>
                         <Row gutter={12}>
-                            <Col xs={24} md={12}>
+                            <Col xs={12} md={12} lg={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -548,7 +549,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={12}>
+                            <Col xs={12} md={12} lg={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -562,10 +563,7 @@ const SalesManagement = () => {
                                     <Select options={orderStatusOptions} />
                                 </Form.Item>
                             </Col>
-                        </Row>
-
-                        <Row gutter={12}>
-                            <Col xs={24} md={8}>
+                            <Col xs={24} md={8} lg={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -588,7 +586,7 @@ const SalesManagement = () => {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={8}>
+                            <Col xs={12} md={8} lg={6}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -613,7 +611,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={8}>
+                            <Col xs={12} md={8} lg={6}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -646,10 +644,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                        </Row>
-
-                        <Row gutter={12}>
-                            <Col xs={24} md={10}>
+                            <Col xs={12} md={10} lg={6}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -674,7 +669,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={7}>
+                            <Col xs={12} md={7} lg={6}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -701,34 +696,6 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={7}>
-                                <Form.Item
-                                    label={
-                                        <FormattedMessage
-                                            id="management.sales.form.label.warehouse-id"
-                                            defaultMessage="Warehouse ID"
-                                        />
-                                    }
-                                    name="warehouseId"
-                                    rules={[
-                                        {
-                                            required: false,
-                                        },
-                                    ]}
-                                >
-                                    <InputNumber className="w-full" />
-                                </Form.Item>
-                            </Col>
-                        </Row>
-
-                        <Row gutter={12}>
-
-
-                        </Row>
-
-
-
-                        <Row gutter={12}>
                             <Col xs={24} md={8}>
                                 <Form.Item
                                     label={
@@ -742,7 +709,6 @@ const SalesManagement = () => {
                                     <Select
                                         allowClear
                                         showSearch
-                                        optionFilterProp="label"
                                         options={deliveries.map((item) => ({
                                             label: item.name,
                                             value: item.id,
@@ -752,7 +718,7 @@ const SalesManagement = () => {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={8}>
+                            <Col xs={12} md={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -765,7 +731,7 @@ const SalesManagement = () => {
                                     <Input />
                                 </Form.Item>
                             </Col>
-                            <Col xs={24} md={8}>
+                            <Col xs={12} md={8}>
                                 <Form.Item
                                     label={
                                         <FormattedMessage
@@ -790,7 +756,6 @@ const SalesManagement = () => {
                                 </Form.Item>
                             </Col>
                         </Row>
-
                         <Form.List
                             name="products"
                             rules={[
@@ -833,6 +798,16 @@ const SalesManagement = () => {
                                             productId,
                                             form.getFieldValue(['products', field.name, 'unitId'])
                                         )
+                                        const selectedUnitId = form.getFieldValue(['products', field.name, 'unitId'])
+                                        const warehouseOptions = warehouses
+                                            .map((warehouse) => {
+                                                const quantity = warehouse.products?.find(
+                                                    (stock) => stock.productId === Number(productId) && stock.unitId === Number(selectedUnitId)
+                                                )?.quantity || 0
+
+                                                return { label: `${warehouse.name} (${quantity} remaining)`, value: warehouse.id, quantity }
+                                            })
+                                            .filter((warehouse) => warehouse.quantity > 0)
 
                                         return (
                                             <Flex
@@ -910,7 +885,7 @@ const SalesManagement = () => {
                                                             </Flex>
                                                         </Form.Item>
                                                     </Col>
-                                                    <Col xs={24} md={12}>
+                                                    <Col xs={12} md={12}>
                                                         <Form.Item
                                                             label={
                                                                 <FormattedMessage
@@ -938,10 +913,27 @@ const SalesManagement = () => {
                                                             />
                                                         </Form.Item>
                                                     </Col>
-                                                </Row>
-
-                                                <Row gutter={12}>
-                                                    <Col xs={24} md={6}>
+                                                    <Col xs={12} md={12}>
+                                                        <Form.Item
+                                                            label={<FormattedMessage id="management.sales.form.label.warehouse-id" defaultMessage="Warehouse" />}
+                                                            name={[field.name, 'warehouseId']}
+                                                            rules={[
+                                                                {
+                                                                    required: true,
+                                                                    message: <FormattedMessage id="message.sales.warehouse-id-is-required" defaultMessage="Warehouse is required" />,
+                                                                },
+                                                            ]}
+                                                        >
+                                                            <Select
+                                                                showSearch
+                                                                loading={isWarehousesLoading}
+                                                                optionFilterProp="label"
+                                                                options={warehouseOptions}
+                                                                placeholder={t('management.sales.form.placeholder.select-warehouse', 'Select warehouse')}
+                                                            />
+                                                        </Form.Item>
+                                                    </Col>
+                                                    <Col xs={10} md={6}>
                                                         <Form.Item
                                                             label={
                                                                 <FormattedMessage
@@ -965,7 +957,7 @@ const SalesManagement = () => {
                                                             <InputNumber min={1} className="w-full" />
                                                         </Form.Item>
                                                     </Col>
-                                                    <Col xs={24} md={6}>
+                                                    <Col xs={14} md={6}>
                                                         <Form.Item
                                                             label={
                                                                 <FormattedMessage
@@ -1038,6 +1030,10 @@ const SalesManagement = () => {
                                                     </Col>
                                                 </Row>
 
+                                                <Row gutter={12}>
+
+                                                </Row>
+
                                                 {selectedUnit?.extraPrices?.length ? (
                                                     <Typography.Text type="secondary">
                                                         {t(
@@ -1059,7 +1055,6 @@ const SalesManagement = () => {
                                 </Flex>
                             )}
                         </Form.List>
-
                         <Row gutter={12} className="mt-12">
                             <Col xs={24} md={5}>
                                 <Form.Item

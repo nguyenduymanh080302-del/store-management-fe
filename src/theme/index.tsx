@@ -34,8 +34,12 @@ export const themeConfig: ThemeConfig = {
 
             subMenuItemBg: color.cyan[5],
             subMenuItemSelectedColor: color.neutral[0],
+            // Collapsed inline menus render submenus in a popup rather than in the sidebar.
+            // Keep the popup on the same cyan surface as the desktop sidebar.
+            popupBg: color.cyan[5],
 
             activeBarBorderWidth: 0,
+
         },
         Table: {
             headerBg: color.primary,

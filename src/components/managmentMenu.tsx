@@ -47,6 +47,7 @@ export const managementMenu: ManagementMenuItem[] = [
             { key: "/product", labelId: "managment.sider.menu.product", permission: PERMISSION.MANAGE_CONTENT },
             { key: "/unit", labelId: "managment.sider.menu.unit", permission: PERMISSION.MANAGE_CONTENT },
             { key: "/warehouse", labelId: "managment.sider.menu.warehouse", permission: PERMISSION.MANAGE_WAREHOUSE },
+            { key: "/import", labelId: "managment.sider.menu.import", permission: PERMISSION.MANAGE_WAREHOUSE },
         ],
     },
 
