@@ -17,6 +17,9 @@ interface ImportMeta {
 }
 
 declare module '*.svg' {
+    import * as React from 'react'
+    const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>
     const src: string
-    export default src
+    export default ReactComponent
+    export { src }
 }

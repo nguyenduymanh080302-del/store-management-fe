@@ -38,6 +38,7 @@ type ProductFormExtraPriceValue = {
 
 type ProductFormUnitValue = {
     unitId: number | string
+    importPrice?: number | string
     sellPrice: number | string
     vatPercent?: number | string
     extraPrices?: ProductFormExtraPriceValue[]
@@ -77,6 +78,7 @@ const normalizeProductFormValues = (raw: ProductFormValues): CreateProductPayloa
     units: raw.units?.map((unit) => ({
         ...unit,
         unitId: Number(unit.unitId),
+        importPrice: unit.importPrice === undefined || unit.importPrice === null || unit.importPrice === '' ? 0 : Number(unit.importPrice),
         sellPrice: Number(unit.sellPrice),
         vatPercent: Number(unit.vatPercent || 0),
         extraPrices: unit.extraPrices?.map((extraPrice) => ({
@@ -500,6 +502,32 @@ const ProductManagement = () => {
                                                         <Button danger onClick={() => remove(field.name)}>
                                                             <IconTrash width={18} height={18} />
                                                         </Button>
+                                                    </Flex>
+
+                                                    <Flex
+                                                        align="center"
+                                                        justify="space-between"
+                                                        gap={12}
+                                                        className='mb-12'
+                                                    >
+                                                        <Typography.Text>
+                                                            <FormattedMessage id="management.product.modal.label.import-price" />
+                                                        </Typography.Text>
+                                                        <Form.Item
+                                                            name={[field.name, 'importPrice']}
+                                                            className="mb-0"
+                                                            style={{ width: 140, maxWidth: '100%' }}
+                                                        >
+                                                            <InputNumber
+                                                                min={0}
+                                                                placeholder={intl.formatMessage({
+                                                                    id: 'management.product.modal.placeholder.import-price',
+                                                                })}
+                                                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                                                parser={(value) => Number(value!.replace(/\$\s?|,/g, '')) as never}
+                                                                style={{ width: '100%' }}
+                                                            />
+                                                        </Form.Item>
                                                     </Flex>
 
                                                     <Flex
